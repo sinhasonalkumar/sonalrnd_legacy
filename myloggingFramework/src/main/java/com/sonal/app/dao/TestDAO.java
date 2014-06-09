@@ -11,7 +11,7 @@ public class TestDAO extends BaseDAO {
 
 	
 	public List<Employee> getAllEMployees() {
-		//List<Employee> employees = (List<Employee>) sessionFactory.getCurrentSession().createQuery("from Employee").list();
+		////List<Employee> employees = (List<Employee>) sessionFactory.getCurrentSession().createQuery("from Employee").list();
 		List<Employee> employees = (List<Employee>) getHibernateTemplate().find("from Employee");
 		//System.out.println(0/0);
 		return employees;
