@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.springbyexample</groupId>
+	<artifactId>sbe-modules-parent</artifactId>
+	<version>2.0</version>
+	<packaging>pom</packaging>
+	<name>SBE Modules</name>
+    <description>
+        Parent pom to aggregate library modules.
+    </description>
+
+    <modules>
+        <module>sbe-servlet-context-scope</module>
+        <module>sbe-thread-scope</module>
+        <module>sbe-dynamic-tiles2</module>
+        <module>sbe-jcr</module>
+        <module>sbe-util</module>
+        <module>sbe-rest</module>
+        <module>sbe-web</module>
+        <module>sbe-validation</module>
+    </modules>
+	
+</project>
+

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springbyexample</groupId>
+        <artifactId>proto-pom-example</artifactId>
+        <version>2.2</version>
+        <relativePath>../../../proto-pom/example</relativePath>
+    </parent>
+
+    <groupId>org.springbyexample.app.contact</groupId>
+    <artifactId>contact-services</artifactId>
+    <version>${contact.app.version}</version>
+    <name>Contact Services</name>
+    <description>
+        Contact services layer for any business logic.
+    </description>
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.springbyexample.app.contact</groupId>
+            <artifactId>contact-dao</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springbyexample.app.contact</groupId>
+            <artifactId>contact-ws-beans</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springbyexample.app.contact</groupId>
+            <artifactId>contact-test</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springbyexample</groupId>
+            <artifactId>sbe-rest-services</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-acl</artifactId>
+        </dependency>
+        <!-- needed by security namespace -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+        </dependency>        
+        
+        <dependency>
+            <groupId>net.sf.dozer</groupId>
+            <artifactId>dozer</artifactId>
+        </dependency>
+        
+        <!-- 
+            Spring Security is trying to load javax.servlet.Filter,
+            no web related dependencies should be used on this layer 
+        -->
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-servlet_3.0_spec</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p" 
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util.xsd">
+    
+    <bean id="abstractJacksonObjectMapper" 
+          class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"
+          p:targetMethod="registerModule">
+        <property name="targetObject">
+            <bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean"
+                  p:indentOutput="true" 
+                  p:simpleDateFormat="yyyy-MM-dd'T'HH:mm:ss.SSSZ">
+                <property name="featuresToDisable">
+                    <util:constant static-field="com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES" />
+                </property>
+            </bean>
+        </property>
+        <property name="arguments">
+            <list>
+                <bean class="com.fasterxml.jackson.datatype.joda.JodaModule" />
+            </list>
+        </property>
+    </bean>    
+          
+    <bean id="abstractMappingJacksonHttpMessageConverter" 
+          class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"
+          abstract="true"/>          
+          
+    <bean id="abstractMappingJacksonJsonView" 
+          class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"
+          abstract="true"
+          p:extractValueFromSingleKeyModel="true"/>
+
+    <bean id="jacksonObjectMapper" parent="abstractJacksonObjectMapper" />
+          
+    <bean id="mappingJacksonHttpMessageConverter" 
+          parent="abstractMappingJacksonHttpMessageConverter"
+          p:objectMapper-ref="jacksonObjectMapper"
+          p:supportedMediaTypes="application/json" />          
+          
+    <bean id="mappingJacksonJsonView" 
+          parent="abstractMappingJacksonJsonView"
+          p:objectMapper-ref="jacksonObjectMapper"
+          p:contentType="application/json" />
+
+</beans>
