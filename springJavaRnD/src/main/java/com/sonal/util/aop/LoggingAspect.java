@@ -18,7 +18,7 @@ import com.sonal.util.logtransactiopncontext.LogTransactionContext;
 public class LoggingAspect {
 
 	@Around("execution(* com.sonal.app..*(..))")
-	@Order(value = 2)
+	@Order(value = 3)
 	public Object startLogging(ProceedingJoinPoint joinPoint) {
 		Object returnedObject = null;
 		Signature signature = joinPoint.getSignature();
@@ -42,6 +42,21 @@ public class LoggingAspect {
 	@Before("execution(* com.sonal.app.main.MainClass.main(..))")
 	@Order(value = 1)
 	public void generateLogTransactionId(JoinPoint joinPoint) {
+
+		try {
+			UUID transactionID = UUID.randomUUID();
+			LogTransactionContext.setTransactionId(transactionID);
+
+		} catch (Throwable e) {
+
+			e.printStackTrace();
+		}
+
+	}
+	
+	@Before("execution(* com.sonal.test.app.service.EmployeeServiceTest.test*(..))")
+	@Order(value = 2)
+	public void generateLogTransactionIdForTestCase(JoinPoint joinPoint) {
 
 		try {
 			UUID transactionID = UUID.randomUUID();

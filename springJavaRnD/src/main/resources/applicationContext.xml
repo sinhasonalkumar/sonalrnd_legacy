@@ -37,6 +37,8 @@
 		<property name="annotatedClasses">
 			<list>
 				<value>com.sonal.app.persistence.entity.Employee</value>
+				<value>com.sonal.app.persistence.entity.Skill</value>
+				<value>com.sonal.app.persistence.entity.Address</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

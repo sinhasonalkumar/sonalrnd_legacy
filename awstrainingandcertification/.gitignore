@@ -1,15 +1,6 @@
-*.class
-
-# Package Files #
-*.jar
-*.war
-*.ear
-
-# Directories #
-/build/
+/target/
+/.settings/
+/.classpath
+/.gitignore
+/.project
 /bin/
-target/
- 
-.DS_Store
-.idea/
-*.iml
