@@ -41,7 +41,7 @@
     
       
     <beans:bean id="dbDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-        <beans:property name="jndiName" value="java:comp/env/jdbc/ALSDataSource"/>
+        <beans:property name="jndiName" value="java:comp/env/jdbc/AppDataSource"/>
     </beans:bean>
      
    

@@ -27,16 +27,16 @@ public class SQSListerner implements ApplicationListener<ContextRefreshedEvent> 
 		// applicationContext.getBean(SQSReceiver.class);
 		// sqsReceiver.receiveMessage();
 
-		System.out.println(" ContextStartedEventListener received " + event.getClass() + "\n at " + event.getTimestamp() + "\n with Source as " + event.getSource().getClass() + "\n for application context " + event.getApplicationContext().getClass());
+		//System.out.println(" ContextStartedEventListener received " + event.getClass() + "\n at " + event.getTimestamp() + "\n with Source as " + event.getSource().getClass() + "\n for application context " + event.getApplicationContext().getClass());
 
 		
 
 		
 
-		receiveMessage();
+		//receiveMessage();
 
 	}
-	@Scheduled(fixedRate = 10000)
+	//@Scheduled(fixedRate = 10000)
 	public void receiveMessage() {
 		String accessId = "";
 		String secretKey = "";

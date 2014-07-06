@@ -9,10 +9,10 @@
 			factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
 			
 			name="jdbc/ALSDataSource" 
-			url="jdbc:mysql://als-rds-mysql-dev-01.cu5wxlldvekc.us-east-1.rds.amazonaws.com:3306/ALS" 
+			url="MYSQL DB URL" 
 			username="als_user"
 			password="h4harry"
 			/> 
   
-  <ResourceLink global="jdbc/ALSDataSource" name="jdbc/ALSDataSource" type="javax.sql.DataSource"/>
+  <ResourceLink global="jdbc/AppDataSource" name="jdbc/AppDataSource" type="javax.sql.DataSource"/>
 </Context>
