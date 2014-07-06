@@ -10,7 +10,7 @@ public class TestMemcache {
 		try {
 			
 		//	MemcachedClient cache = new MemcachedClient(AddrUtil.getAddresses("127.0.0.1:11211"));
-			MemcachedClient cache = new MemcachedClient(AddrUtil.getAddresses("wbid-dev.vzjwvs.0001.use1.cache.amazonaws.com:11211"));
+			MemcachedClient cache = new MemcachedClient(AddrUtil.getAddresses("ElastiCache END POINT"));
 			
 			
 			addToCache("testKey","Hello Memcache",cache);

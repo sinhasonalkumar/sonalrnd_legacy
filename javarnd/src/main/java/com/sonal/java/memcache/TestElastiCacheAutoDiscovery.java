@@ -8,7 +8,7 @@ import net.spy.memcached.MemcachedClient;
 public class TestElastiCacheAutoDiscovery {
 
 	public static void main(String[] args) throws IOException {
-		String configEndpoint = "mycluster.fnjyzo.cfg.use1.cache.amazonaws.com";
+		String configEndpoint = "ElastiCache Cluster END POINT";
 		Integer clusterPort = 11211;
 		MemcachedClient client = new MemcachedClient(new InetSocketAddress(configEndpoint, clusterPort));
 		// The client will connect to the other cache nodes automatically
