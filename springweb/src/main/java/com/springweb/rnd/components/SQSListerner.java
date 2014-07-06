@@ -38,11 +38,11 @@ public class SQSListerner implements ApplicationListener<ContextRefreshedEvent> 
 	}
 	@Scheduled(fixedRate = 10000)
 	public void receiveMessage() {
-		String accessId = "AKIAJRXAAND4DCIHQVOQ";
-		String secretKey = "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";
+		String accessId = "";
+		String secretKey = "";
 		AWSCredentials credentials = new BasicAWSCredentials(accessId, secretKey);
 		AmazonSQS sqs = new AmazonSQSClient(credentials);
-		ReceiveMessageRequest request = new ReceiveMessageRequest("https://sqs.us-east-1.amazonaws.com/868630891305/wbid_dev");
+		ReceiveMessageRequest request = new ReceiveMessageRequest("SQS End POINT");
 		ReceiveMessageResult result = sqs.receiveMessage(request);
 		List<Message> messages = result.getMessages();
 		
@@ -51,7 +51,7 @@ public class SQSListerner implements ApplicationListener<ContextRefreshedEvent> 
 				System.out.println("receiving message " + message.getMessageId());
 				System.out.println("Message Body" + message.getBody());
 
-				DeleteMessageRequest deleteMessageRequest = new DeleteMessageRequest("https://sqs.us-east-1.amazonaws.com/868630891305/wbid_dev", message.getReceiptHandle());
+				DeleteMessageRequest deleteMessageRequest = new DeleteMessageRequest("SQS End POINT", message.getReceiptHandle());
 				sqs.deleteMessage(deleteMessageRequest);
 			}
 		

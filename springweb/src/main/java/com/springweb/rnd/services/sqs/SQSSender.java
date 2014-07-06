@@ -12,11 +12,11 @@ import com.amazonaws.services.sqs.model.SendMessageRequest;
 public class SQSSender { 
 
 	public void sendMessage(){
-		String accessId = "AKIAJRXAAND4DCIHQVOQ";
-		String secretKey = "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";
+		String accessId = "";
+		String secretKey = "";
 		AWSCredentials credentials = new BasicAWSCredentials(accessId,secretKey);
 		AmazonSQS sqs = new AmazonSQSClient(credentials);
-		sqs.sendMessage(new SendMessageRequest("https://sqs.us-east-1.amazonaws.com/868630891305/wbid_dev", "TestSQSMessage"));
+		sqs.sendMessage(new SendMessageRequest("SQS END POINT", "TestSQSMessage"));
 	}
 
 }

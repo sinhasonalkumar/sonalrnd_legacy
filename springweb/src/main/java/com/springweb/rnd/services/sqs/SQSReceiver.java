@@ -19,11 +19,11 @@ public class SQSReceiver {
 	
 	
 	public void receiveMessage(){
-		String accessId = "AKIAJRXAAND4DCIHQVOQ";
-		String secretKey = "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";
+		String accessId = "";
+		String secretKey = "";
 		AWSCredentials credentials = new BasicAWSCredentials(accessId,secretKey);
 		AmazonSQS sqs = new AmazonSQSClient(credentials);
-		ReceiveMessageRequest request = new ReceiveMessageRequest("https://sqs.us-east-1.amazonaws.com/868630891305/wbid_dev");
+		ReceiveMessageRequest request = new ReceiveMessageRequest("SQS END POINT");
 		ReceiveMessageResult result = sqs.receiveMessage(request);
 		List<com.amazonaws.services.sqs.model.Message> messages = result.getMessages();
 
@@ -31,7 +31,7 @@ public class SQSReceiver {
             System.out.println("receiving message " + message.getMessageId());
             System.out.println("Message Body" + message.getBody());
             
-            DeleteMessageRequest deleteMessageRequest = new DeleteMessageRequest("https://sqs.us-east-1.amazonaws.com/868630891305/wbid_dev",message.getReceiptHandle());
+            DeleteMessageRequest deleteMessageRequest = new DeleteMessageRequest("SQS END POINT",message.getReceiptHandle());
             sqs.deleteMessage(deleteMessageRequest);
         }
         

@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -16,6 +17,15 @@ import com.sonal.util.logtransactiopncontext.LogTransactionContext;
 @Component
 @Aspect
 public class LoggingAspect {
+	
+	
+	
+	
+	@After("@annotation(com.sonal.util.annotation.LogStatement)")
+	@Order(value = 4)
+	public void logLocalVarible(JoinPoint joinPoint) {
+		System.out.println("***************");
+	}
 
 	@Around("execution(* com.sonal.app..*(..))")
 	@Order(value = 3)

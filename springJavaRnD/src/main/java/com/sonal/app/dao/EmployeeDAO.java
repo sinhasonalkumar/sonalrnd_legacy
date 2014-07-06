@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.sonal.app.persistence.entity.Address;
 import com.sonal.app.persistence.entity.Employee;
+import com.sonal.app.persistence.entity.Skill;
 import com.sonal.app.service.transactiontypes.ReadOnlyTransactional;
 
 @Repository
@@ -33,6 +34,16 @@ public class EmployeeDAO extends BaseDAO {
 	@ReadOnlyTransactional
 	public List<Employee> getEmployeeWithSkills() {
 		List<Employee> employees = (List<Employee>)getHibernateTemplate().find("from Employee");
+		
+		for (Employee employee : employees) {
+			Set<Skill> skills = employee.getSkills();
+			if(!Hibernate.isInitialized(skills)){
+				for (Skill skill : skills) {
+					Hibernate.initialize(skill);
+				}
+				
+			}
+		}
 
 		return employees;
 	}
