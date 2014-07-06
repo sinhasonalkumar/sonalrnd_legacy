@@ -33,10 +33,10 @@ public class SQSListerner implements ApplicationListener<ContextRefreshedEvent> 
 
 		
 
-		//receiveMessage();
+		receiveMessage();
 
 	}
-	//@Scheduled(fixedRate = 10000)
+	@Scheduled(fixedRate = 10000)
 	public void receiveMessage() {
 		String accessId = "";
 		String secretKey = "";
