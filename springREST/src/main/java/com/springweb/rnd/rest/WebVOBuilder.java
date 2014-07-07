@@ -6,7 +6,7 @@ public class WebVOBuilder {
 
 	public static StudentWebVO buildStudentWebVO() {
 		StudentWebVO studentWebVO = new StudentWebVO();
-		studentWebVO.setName("test");
+		studentWebVO.setStudentName("test");
 		studentWebVO.setAge(30);
 		return studentWebVO;
 	}
