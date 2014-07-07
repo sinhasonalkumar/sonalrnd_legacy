@@ -91,9 +91,6 @@ public class SpringAsyncRESTClient {
 
 		System.out.println("Doing other async callable calls ...");
 
-		// waits for the service to send the response
-		Thread.sleep(1);
-
 	}
 
 	public void postAsyncCall() throws Exception {
@@ -164,10 +161,6 @@ public class SpringAsyncRESTClient {
 		});
 
 		System.out.println("Doing other async callable calls ...");
-
-		// waits for the service to send the response
-		Thread.sleep(1);
-
 	}
 
 }
