@@ -123,10 +123,9 @@ public class ApplicationContextConfig {
 			PoolingNHttpClientConnectionManager connectionManager = new PoolingNHttpClientConnectionManager(new DefaultConnectingIOReactor(IOReactorConfig.DEFAULT));
 			connectionManager.setMaxTotal(DEFAULT_MAX_TOTAL_CONNECTIONS);
 			connectionManager.setDefaultMaxPerRoute(DEFAULT_MAX_CONNECTIONS_PER_ROUTE);
-			connectionManager.setMaxPerRoute(new HttpRoute(new HttpHost("facebook.com")), 20);
-			connectionManager.setMaxPerRoute(new HttpRoute(new HttpHost("twitter.com")), 20);
-			connectionManager.setMaxPerRoute(new HttpRoute(new HttpHost("linkedin.com")), 20);
-			connectionManager.setMaxPerRoute(new HttpRoute(new HttpHost("viadeo.com")), 20);
+			//connectionManager.setMaxPerRoute(new HttpRoute(new HttpHost("facebook.com")), 20);
+			//connectionManager.setMaxPerRoute(new HttpRoute(new HttpHost("twitter.com")), 20);
+			//connectionManager.setMaxPerRoute(new HttpRoute(new HttpHost("linkedin.com")), 20);
 			RequestConfig config = RequestConfig.custom().setConnectTimeout(DEFAULT_READ_TIMEOUT_MILLISECONDS).build();
 
 			CloseableHttpAsyncClient httpclient = HttpAsyncClientBuilder.create().setConnectionManager(connectionManager).setDefaultRequestConfig(config).build();
