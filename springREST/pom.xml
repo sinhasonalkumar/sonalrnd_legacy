@@ -7,6 +7,14 @@
 	<packaging>war</packaging>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.14.2</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
@@ -25,21 +33,20 @@
 			<version>2.2.3</version>
 		</dependency>
 
-
-		<!-- <dependency> <groupId>net.spy</groupId> <artifactId>spymemcached</artifactId> 
-			<version>2.10.0</version> </dependency> -->
 		<dependency>
-			<groupId>com.amazonaws</groupId>
-			<artifactId>elasticache-java-cluster-client</artifactId>
-			<version>1.0.61.0</version>
+			<groupId>com.fasterxml.jackson.jaxrs</groupId>
+			<artifactId>jackson-jaxrs-json-provider</artifactId>
+			<version>2.4.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-asl</artifactId>
+			<version>1.9.13</version>
 		</dependency>
 
 
-		<dependency>
-			<groupId>com.amazonaws</groupId>
-			<artifactId>aws-java-sdk</artifactId>
-			<version>1.7.9</version>
-		</dependency>
+
 
 		<dependency>
 			<groupId>mysql</groupId>

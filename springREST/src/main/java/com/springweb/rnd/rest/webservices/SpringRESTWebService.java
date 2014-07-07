@@ -5,23 +5,42 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.springweb.rnd.rest.WebVOBuilder;
+import com.springweb.rnd.rest.vo.StudentWebVO;
+
 @Controller
 public class SpringRESTWebService {
 
-	@RequestMapping(value = "/helloWorldRESTService", method = RequestMethod.GET)
+	@RequestMapping(value = "/helloWorldRESTGETService", method = RequestMethod.GET)
 	public @ResponseBody
-	String helloWorldRESTService() {
-		System.out.println("helloWorldRESTService entered !!");
+	StudentWebVO helloWorldRESTGETService() {
+		StudentWebVO buildStudentWebVO = WebVOBuilder.buildStudentWebVO();
 
-		return "Hello World !!";
+		return buildStudentWebVO;
 	}
 
-	@RequestMapping(value = "/testElastiCache", method = RequestMethod.GET)
+	@RequestMapping(value = "/helloWorldRESTPOSTService", method = RequestMethod.POST)
 	public @ResponseBody
-	String testElastiCache() {
-		
-		return "testElastiCache Worked !!";
+	StudentWebVO helloWorldRESTPOSTService() {
+		StudentWebVO buildStudentWebVO = WebVOBuilder.buildStudentWebVO();
+
+		return buildStudentWebVO;
 	}
 
+	@RequestMapping(value = "/helloWorldRESTPUTService", method = RequestMethod.PUT)
+	public @ResponseBody
+	StudentWebVO helloWorldRESTPUTService() {
+		StudentWebVO buildStudentWebVO = WebVOBuilder.buildStudentWebVO();
+
+		return buildStudentWebVO;
+	}
+
+	@RequestMapping(value = "/helloWorldRESTDELETEService", method = RequestMethod.DELETE)
+	public @ResponseBody
+	StudentWebVO helloWorldRESTDELETEService() {
+		StudentWebVO buildStudentWebVO = WebVOBuilder.buildStudentWebVO();
+
+		return buildStudentWebVO;
+	}
 
 }
