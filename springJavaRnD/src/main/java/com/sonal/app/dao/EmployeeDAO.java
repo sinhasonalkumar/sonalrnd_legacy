@@ -62,4 +62,12 @@ public class EmployeeDAO extends BaseDAO {
 
 		return employees;
 	}
+	
+	@ReadOnlyTransactional
+	public List<Employee> getEmployeesBySkill(String skill) {
+		String hql = "from Emplyee e, Skill s where e.id = s.emp_id and s.skillName = :skill";
+		List<Employee> employees = (List<Employee>)getHibernateTemplate().find("from Employee");
+
+		return employees;
+	}
 }
