@@ -9,9 +9,12 @@
 	<context:component-scan base-package="com.sonal" />
 	<aop:aspectj-autoproxy />
 	
+	
 	<context:annotation-config />
 	<task:annotation-driven />
 	<tx:annotation-driven />
+	
+	<bean class="com.sonal.testaudit.aspect.AuditAspect" factory-method="aspectOf"/>
 
 	<bean id="transactionManager"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
