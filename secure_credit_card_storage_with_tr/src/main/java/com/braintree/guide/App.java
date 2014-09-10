@@ -2,7 +2,11 @@ package com.braintree.guide;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +20,7 @@ import spark.Route;
 import spark.Spark;
 
 import com.braintreegateway.BraintreeGateway;
+import com.braintreegateway.CreditCard;
 import com.braintreegateway.Customer;
 import com.braintreegateway.CustomerRequest;
 import com.braintreegateway.Environment;
@@ -88,9 +93,17 @@ public class App {
             public Object handle(spark.Request request, Response response) {
                 response.type("text/html");
                 Result<Customer> result = gateway.transparentRedirect().confirmCustomer(request.queryString());
+                Customer customer = result.getTarget();
+                List<CreditCard> creditCards = customer.getCreditCards();
+                
+                for (CreditCard creditCard : creditCards) {
+					System.out.println(creditCard.getCreatedAt().getTime());
+				}
+                // brainTree sorts credit card added.. Latest added cc will on top
+                
                 String message = "";
                 if (result.isSuccess()) {
-                    message = result.getTarget().getEmail().toString();
+                    message = customer.getEmail().toString();
                 } else {
                     message = result.getMessage();
                 }
