@@ -50,7 +50,7 @@ public class App {
                         .type(Transaction.Type.SALE)
                         .amount(new BigDecimal("1.00"))
                         .options()
-                            .submitForSettlement(true)
+                            //.submitForSettlement(true) // this submits transaction request only for settlement but not for authorisation 
                             .done();
 
                 String trData = gateway.transparentRedirect().trData(trParams, "http://localhost:4567/braintree");
