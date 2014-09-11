@@ -47,11 +47,13 @@ public class App {
 
                 String braintreeUrl = gateway.transparentRedirect().url();
                 TransactionRequest trParams = new TransactionRequest()
+                
                         .type(Transaction.Type.SALE)
                         .amount(new BigDecimal("1.00"))
-                        .options()
-                            //.submitForSettlement(true) // this submits transaction request only for settlement but not for authorisation 
+                        .options()//.storeInVault(true)
+                            .submitForSettlement(true) // this submits transaction request for settlement after doing authorisation 
                             .done();
+                trParams.customerId("966575129"); //for adding  existing customer but do not store cc
 
                 String trData = gateway.transparentRedirect().trData(trParams, "http://localhost:4567/braintree");
 
@@ -67,7 +69,8 @@ public class App {
             @Override
             public Object handle(spark.Request request, Response response) {
                 response.type("text/html");
-                Result<Transaction> result = gateway.transparentRedirect().confirmTransaction(request.queryString());
+                String queryString = request.queryString();
+				Result<Transaction> result = gateway.transparentRedirect().confirmTransaction(queryString);
                 String message = "";
                 if (result.isSuccess()) {
                     message = result.getTarget().getStatus().toString();
