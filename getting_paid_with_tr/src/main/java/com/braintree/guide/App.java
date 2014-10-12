@@ -20,12 +20,19 @@ import com.braintreegateway.Transaction;
 import com.braintreegateway.TransactionRequest;
 
 public class App {
+//    private static BraintreeGateway gateway = new BraintreeGateway(
+//            Environment.SANDBOX,
+//            "vmb9ypb3p5hmnz78",
+//            "vs4nrt5xbdjzk2mf",
+//            "fd38a3b6cf31276b26df6b2483bcb57e"
+//            );
+    
     private static BraintreeGateway gateway = new BraintreeGateway(
-            Environment.SANDBOX,
-            "vmb9ypb3p5hmnz78",
-            "vs4nrt5xbdjzk2mf",
-            "fd38a3b6cf31276b26df6b2483bcb57e"
-            );
+    		  Environment.SANDBOX,
+    		  "yqjvhw3mpjyngw5r",
+    		  "6dgp6vhx8jr3s8f3",
+    		  "5a611a0a17b263ca8e4abb3a1e0f6094"
+    		);
 
     private static String renderHtml(String templateFname, HashMap<String, String> valuesMap) {
         try {
@@ -51,6 +58,7 @@ public class App {
                         .type(Transaction.Type.SALE)
                         .amount(new BigDecimal("1.00"))
                         .options()//.storeInVault(true)
+                        .storeInVault(true)
                             .submitForSettlement(true) // this submits transaction request for settlement after doing authorisation 
                             .done();
                 trParams.customerId("966575129"); //for adding  existing customer but do not store cc

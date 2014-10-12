@@ -26,5 +26,10 @@ public class UniAsyncRESTClientTest {
 	public void testPostCall() throws Exception{
 		uniAsyncRESTClient.postCall();
 	}
+	
+	@Test
+	public void testPostCallDotNet() throws Exception{
+		uniAsyncRESTClient.postCallDotNet();
+	}
 
 }

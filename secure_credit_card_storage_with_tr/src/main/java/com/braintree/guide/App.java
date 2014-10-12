@@ -55,7 +55,7 @@ public class App {
 
                 String braintreeUrl = gateway.transparentRedirect().url();
                 CustomerRequest trParams = new CustomerRequest();
-                trParams.customerId("33555604"); //for adding new  credit card information to existing customer
+                trParams.customerId("966826639"); //for adding new  credit card information to existing customer
                 
                 System.out.println(braintreeUrl);
                 String trData = gateway.transparentRedirect().trData(trParams, "http://localhost:4567/braintree");
