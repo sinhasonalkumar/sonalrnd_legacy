@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/HibernateLib"/>
+	<classpathentry kind="lib" path="/Users/ssinha/sonal/JavaApplications/MyHibernateTraining/Hibernate JPA Jars/hibernate-ehcache-3.3.1.GA.jar"/>
+	<classpathentry kind="lib" path="/Users/ssinha/sonal/JavaApplications/MyHibernateTraining/Hibernate JPA Jars/ehcache-1.2.3.jar"/>
+	<classpathentry kind="lib" path="/Users/ssinha/sonal/JavaApplications/MyHibernateTraining/Hibernate JPA Jars/asm-1.5.1.jar"/>
+	<classpathentry kind="lib" path="/Users/ssinha/sonal/JavaApplications/MyHibernateTraining/Hibernate JPA Jars/mysql-connector-java-5.0.7.jar"/>
+	<classpathentry kind="lib" path="/Users/ssinha/sonal/JavaApplications/MyHibernateTraining/Hibernate JPA Jars/antlr-2.7.6.jar"/>
+	<classpathentry kind="lib" path="/Users/ssinha/sonal/JavaApplications/MyHibernateTraining/Hibernate JPA Jars/slf4j-api-1.5.8.jar"/>
+	<classpathentry kind="lib" path="/Users/ssinha/sonal/JavaApplications/MyHibernateTraining/Hibernate JPA Jars/slf4j-jcl-1.5.8.jar"/>
+	<classpathentry kind="lib" path="/Users/ssinha/sonal/JavaApplications/MyHibernateTraining/Hibernate JPA Jars/dom4j.jar"/>
+	<classpathentry kind="lib" path="/Users/ssinha/sonal/JavaApplications/MyHibernateTraining/Hibernate JPA Jars/ejb3-persistence.jar"/>
+	<classpathentry kind="lib" path="/Users/ssinha/sonal/JavaApplications/MyHibernateTraining/Hibernate JPA Jars/hibernate-annotations.jar"/>
+	<classpathentry kind="lib" path="/Users/ssinha/sonal/JavaApplications/MyHibernateTraining/Hibernate JPA Jars/hibernate-commons-annotations.jar"/>
+	<classpathentry kind="lib" path="/Users/ssinha/sonal/JavaApplications/MyHibernateTraining/Hibernate JPA Jars/hibernate-core.jar"/>
+	<classpathentry kind="lib" path="/Users/ssinha/sonal/JavaApplications/MyHibernateTraining/Hibernate JPA Jars/javassist.jar"/>
+	<classpathentry kind="lib" path="/Users/ssinha/sonal/JavaApplications/MyHibernateTraining/Hibernate JPA Jars/jta.jar"/>
+	<classpathentry kind="lib" path="/Users/ssinha/sonal/JavaApplications/MyHibernateTraining/Hibernate JPA Jars/hibernate-entitymanager.jar"/>
+	<classpathentry kind="lib" path="/Users/ssinha/sonal/JavaApplications/MyHibernateTraining/Hibernate JPA Jars/commons-logging.jar"/>
+	<classpathentry kind="lib" path="/Users/ssinha/sonal/JavaApplications/MyHibernateTraining/Hibernate JPA Jars/commons-collections.jar"/>
+	<classpathentry kind="lib" path="/Users/ssinha/sonal/JavaApplications/MyHibernateTraining/Hibernate JPA Jars/hsqldb.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
