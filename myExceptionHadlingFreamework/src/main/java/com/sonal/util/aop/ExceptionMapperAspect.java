@@ -9,7 +9,7 @@ import com.sonal.util.exception.AppException;
 
 @Component
 @Aspect
-public class MapExceptionAspect {
+public class ExceptionMapperAspect {
 
 	@Around("@annotation(com.sonal.util.annotation.MapException)")
 	public Object mapException(ProceedingJoinPoint joinPoint) throws Throwable {
