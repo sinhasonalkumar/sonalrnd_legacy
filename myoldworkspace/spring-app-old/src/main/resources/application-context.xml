@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:amq="http://activemq.apache.org/schema/core" xmlns:context="http://www.springframework.org/schema/context" xmlns:jms="http://www.springframework.org/schema/jms" xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd
+                        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms.xsd
+                        http://www.springframework.org/schema/aop 
+                        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+	<context:component-scan base-package="com.sonal.spring.*" />
+	<context:annotation-config />
+
+	<aop:aspectj-autoproxy />
+
+
+	<!-- A file based configuration bean -->
+	<bean id="configuration" class="org.apache.commons.configuration.PropertiesConfiguration">
+		<constructor-arg type="java.net.URL" value="dynamicProperties.properties" />
+		<property name="reloadingStrategy" ref="reloadingStrategy" />
+	</bean>
+	
+	<!-- Start The managed reloading strategy for the configuration bean-->
+	
+	<!-- The managed reloading strategy for the configuration bean by Auto way -->
+	
+	<bean id="reloadingStrategy" class="org.apache.commons.configuration.reloading.FileChangedReloadingStrategy" />
+
+	<!-- The managed reloading strategy for the configuration bean by JMX way
+	<bean id="reloadingStrategy" class="org.apache.commons.configuration.reloading.ManagedReloadingStrategy" />
+	-->
+	
+	<!-- End The managed reloading strategy for the configuration bean-->
+
+	<!-- The MBeanExporter that exposes reloadingStrategy to the JMX console -->
+	<bean id="mbeanMetadataExporter" class="org.springframework.jmx.export.MBeanExporter">
+		<property name="server" ref="mbeanServer" />
+		<property name="beans">
+			<map>
+				<entry key="PropertyFileReloader:reload=configuration" value-ref="reloadingStrategy" />
+			</map>
+		</property>
+	</bean>
+
+	<!-- this bean must not be lazily initialized if the exporting is to happen -->
+	<bean id="exporter" class="org.springframework.jmx.export.MBeanExporter" lazy-init="false">
+		<property name="assembler" ref="assembler" />
+		<property name="namingStrategy" ref="namingStrategy" />
+		<property name="autodetect" value="true" />
+	</bean>
+
+	<bean id="jmxAttributeSource" class="org.springframework.jmx.export.annotation.AnnotationJmxAttributeSource" />
+
+	<!-- will create management interface using annotation metadata -->
+	<bean id="assembler" class="org.springframework.jmx.export.assembler.MetadataMBeanInfoAssembler">
+		<property name="attributeSource" ref="jmxAttributeSource" />
+	</bean>
+
+	<!-- will pick up the ObjectName from the annotation -->
+	<bean id="namingStrategy" class="org.springframework.jmx.export.naming.MetadataNamingStrategy">
+		<property name="attributeSource" ref="jmxAttributeSource" />
+	</bean>
+
+	<bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">
+		<property name="locateExistingServerIfPossible" value="true" />
+	</bean>
+
+</beans>

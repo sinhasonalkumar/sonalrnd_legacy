@@ -1,0 +1,560 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.sonal.test</groupId>
+  <artifactId>springHibernateTest</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  
+  <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<junit.version>4.7</junit.version>
+		<jpa.version>1.0</jpa.version>
+		<maven.compiler.version>2.3.2</maven.compiler.version>
+		<maven.javadoc.version>2.8</maven.javadoc.version>
+		<maven.jxr.version>2.3</maven.jxr.version>
+		<maven.pmd.version>2.5</maven.pmd.version>
+		<maven.surefire.report.version>2.9</maven.surefire.report.version>
+		<maven.cobertura.version>2.5.1</maven.cobertura.version>
+		<maven.javancss.version>2.0-beta-2</maven.javancss.version>
+		<maven.sonar.version>2.9</maven.sonar.version>
+		<maven.resources.version>2.5</maven.resources.version>
+		<maven.jaxb2.version>0.8.0</maven.jaxb2.version>
+		<jre.version>1.6</jre.version>
+		<commons.lang.version>2.6</commons.lang.version>
+		<commons.net.version>2.0</commons.net.version>
+        <spring.version>3.1.1.RELEASE</spring.version>
+		<aspectweaver.version>1.6.12</aspectweaver.version>
+		<aspectjrt.version>1.6.12 </aspectjrt.version>
+		<hibernate.version>3.6.0.Final</hibernate.version>
+		<hibernate.annotations.version>3.6.0.Final</hibernate.annotations.version>
+		<hibernate.jpa.version>1.0.1.Final</hibernate.jpa.version>
+		<javax.mail.version>1.4.3</javax.mail.version>
+		<sl4j.version>1.6.0</sl4j.version>
+		<jersey.version>1.12</jersey.version>
+		<jasypt.version>1.7</jasypt.version>
+		<apache.xmlsec.version>1.0.1</apache.xmlsec.version>
+		<mysql.version>5.1.19</mysql.version>
+		<maven.surefire.version>2.9</maven.surefire.version>
+	</properties>
+	
+	
+
+	<repositories>
+		<repository>
+			<id>java.net</id>
+			<url>http://download.java.net/maven/2</url>
+		</repository>
+		<repository>
+			<id>wb-ext-local</id>
+			<url>http://ci.warnerbros.com/artifactory/ext-dependencies-local/</url>
+		</repository>
+		<repository>
+			<id>wb-repositories</id>
+			<name>WB ADS Central Maven Repositories</name>
+			<url>http://ci.warnerbros.com/artifactory/repo</url>
+		</repository>
+		
+	<!--START:: FLASH PACKAGER REPOSITORY -->	
+		<repository>
+			<id>wb-repos</id>
+			<name>private-internal-repository</name>			
+			<url>http://ci.warnerbros.com/artifactory/wb-products-releases/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>snapshots</id>
+			<url>http://ci.warnerbros.com/artifactory/wb-products-snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+	<!--END:: FLASH PACKAGER REPOSITORY -->	
+	</repositories>
+
+	<distributionManagement>
+		<repository>
+			<id>wb-services-releases</id>
+			<name>ci.warnerbros.com-releases</name>
+			<url>http://ci.warnerbros.com/artifactory/wb-services-releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>wb-services-snapshots</id>
+			<name>ci.warnerbros.com-snapshots</name>
+			<url>http://ci.warnerbros.com/artifactory/wb-services-snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+	
+	
+	<dependencies>
+	
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.sun.grizzly</groupId>
+			<artifactId>grizzly-servlet-webserver</artifactId>
+			<version>1.9.8</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20090211</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.4</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-pool</groupId>
+					<artifactId>commons-pool</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-pool</groupId>
+			<artifactId>commons-pool</artifactId>
+			<version>1.6</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils-core</artifactId>
+			<version>1.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+		</dependency>
+
+
+		<!-- Apache Commons Upload -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.3.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.security</groupId>
+			<artifactId>apache-xmlsec</artifactId>
+			<version>${apache.xmlsec.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-grizzly</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-server</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-json</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey.contribs</groupId>
+			<artifactId>jersey-multipart</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey.contribs</groupId>
+			<artifactId>jersey-spring</artifactId>
+			<version>${jersey.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-web</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-beans</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-context</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-aop</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>${commons.lang.version}</version>
+		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>com.wb.es</groupId> -->
+		<!-- <artifactId>wb-es-payload</artifactId> -->
+		<!-- <version>1.0</version> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.wb.dc</groupId> -->
+		<!-- <artifactId>wb-dc-payload</artifactId> -->
+		<!-- <version>1.0-SNAPSHOT</version> -->
+		<!-- </dependency> -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-oxm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.ws</groupId>
+			<artifactId>spring-xml</artifactId>
+			<version>1.5.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc5</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.0-api</artifactId>
+			<version>${hibernate.jpa.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${sl4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.3.159</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.warnerbros.commons</groupId>
+			<artifactId>wb-commons-ws</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+			<version>2.0</version>
+			<classifier>ftp</classifier>
+		</dependency>
+		
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.7</version>
+			<classifier>20101029</classifier>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.poi-ooxml</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.7</version>
+			<classifier>20101029</classifier>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.poi-ooxml-schemas</groupId>
+			<artifactId>poi-ooxml-schemas</artifactId>
+			<version>3.7</version>
+			<classifier>20101029</classifier>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.poi-scratchpad</groupId>
+			<artifactId>poi-scratchpad</artifactId>
+			<version>3.7</version>
+			<classifier>20101029</classifier>
+			<type>jar</type>
+		</dependency>
+
+		
+		<!-- <dependency> <groupId>com.github.springtestdbunit</groupId> <artifactId>spring-test-dbunit</artifactId> 
+			<version>1.0.0</version> <scope>test</scope> </dependency> <dependency> <groupId>org.dbunit</groupId> 
+			<artifactId>dbunit</artifactId> <version>2.4.8</version> <type>jar</type> 
+			<scope>test</scope> </dependency> -->
+
+
+
+		<!-- ======== START:: SPECIFIC JARS OF FLASH FROM FAXS-TOOL-LIBS =================================== -->
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.adobe-flashaccess-certs</groupId>
+			<artifactId>adobe-flashaccess-certs</artifactId>
+			<version>0.1</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.adobe-flashaccess-lcrm</groupId>
+			<artifactId>adobe-flashaccess-lcrm</artifactId>
+			<version>0.1</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.adobe-flashaccess-lcrm-cli</groupId>
+			<artifactId>adobe-flashaccess-lcrm-cli</artifactId>
+			<version>0.1</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.adobe-flashaccess-sdk</groupId>
+			<artifactId>adobe-flashaccess-sdk</artifactId>
+			<version>0.1</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.AdobePackager</groupId>
+			<artifactId>AdobePackager</artifactId>
+			<version>0.1</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.AdobePolicyManager</groupId>
+			<artifactId>AdobePolicyManager</artifactId>
+			<version>0.1</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.AdobePolicyUpdateListManager</groupId>
+			<artifactId>AdobePolicyUpdateListManager</artifactId>
+			<version>0.1</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.AdobePublisherIDUtility</groupId>
+			<artifactId>AdobePublisherIDUtility</artifactId>
+			<version>0.1</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.AdobeRevocationListManager</groupId>
+			<artifactId>AdobeRevocationListManager</artifactId>
+			<version>0.1</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.bcmail-jdk15</groupId>
+			<artifactId>bcmail-jdk15</artifactId>
+			<version>141</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.bcprov-jdk15</groupId>
+			<artifactId>bcprov-jdk15</artifactId>
+			<version>141</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.dot2.CLASPackager</groupId>
+			<artifactId>CLASPackager</artifactId>
+			<version>1.0.6</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.commons-discovery</groupId>
+			<artifactId>commons-discovery</artifactId>
+			<version>0.4</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.dot2.FAXSUtil</groupId>
+			<artifactId>FAXSUtil</artifactId>
+			<version>1.0.4</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.jaxb-libs</groupId>
+			<artifactId>jaxb-libs</artifactId>
+			<version>0.1</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.jsafe</groupId>
+			<artifactId>jsafe</artifactId>
+			<version>0.1</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.PolicyGenerator</groupId>
+			<artifactId>PolicyGenerator</artifactId>
+			<version>1.0.3</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.relaxngDatatype</groupId>
+			<artifactId>relaxngDatatype</artifactId>
+			<version>0.1</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.rm-pdrl</groupId>
+			<artifactId>rm-pdrl</artifactId>
+			<version>0.1</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.6.11</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.6.11</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wb.ads.dot-uvtool-web.xsdlib</groupId>
+			<artifactId>xsdlib</artifactId>
+			<version>0.1</version>
+			<type>jar</type>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+			<version>[2.0.0]</version>
+			<type>pom</type>
+		</dependency>
+		
+	</dependencies>
+	
+	
+	
+	 <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+                    <docletArtifact>
+                        <groupId>org.umlgraph</groupId>
+                        <artifactId>doclet</artifactId>
+                        <version>5.1</version>
+                    </docletArtifact>
+                    <additionalparam>-views</additionalparam>
+                    <show>private</show>
+                    <useStandardDocletOptions>true</useStandardDocletOptions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
