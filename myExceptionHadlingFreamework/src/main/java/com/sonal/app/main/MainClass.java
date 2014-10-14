@@ -5,29 +5,26 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.sonal.app.service.internal.InternalService;
-import com.sonal.util.exception.AppException;
+import com.sonal.util.annotation.HandleException;
+import com.sonal.util.annotation.MapException;
 
 @Component
 public class MainClass {
 	
 
-	public static void main(String[] args){
+	
+	public static void main(String[] args) throws Throwable{
 		ApplicationContext appContext = new ClassPathXmlApplicationContext("applicationContext.xml");
-		InternalService internalService = appContext.getBean(InternalService.class);
-		try {
-			internalService.callInternalService();
-		} catch (Throwable e) {
-			
-			if (e instanceof AppException) {
-				AppException appException = (AppException) e;
-				System.out.println(appException.getErrorCode());
-				System.out.println(appException.getErrorMessage());
-				System.out.println(appException.getExceptionType());
-				System.out.println(appException.getExceptionClass());
-				System.out.println(appException.getRootCause());
-				//appException.printStackTrace();
-			}
-		}
+		MainClass main = appContext.getBean(MainClass.class);
+		main.call(appContext);
 		
+	}
+	
+	@MapException
+	@HandleException(clazz = InternalService.class,errorCode = "INT_01",errorMessage = "callInternalService Failed",exceptionType = "InternalException")
+	public void call(ApplicationContext appContext) throws Throwable{
+		
+		InternalService internalService = appContext.getBean(InternalService.class);
+		internalService.callInternalService();
 	}
 }

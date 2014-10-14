@@ -15,7 +15,7 @@ import com.sonal.util.exception.AppException;
 public class HandleExceptionAspect {
 
 	@Around("@annotation(com.sonal.util.annotation.HandleException)")
-	public Object startLogging(ProceedingJoinPoint joinPoint) throws Throwable {
+	public Object handleException(ProceedingJoinPoint joinPoint) throws Throwable {
 		Object result = null;
 		String errorMessage = null;
 		String errorCode = null;
