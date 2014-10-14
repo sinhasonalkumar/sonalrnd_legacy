@@ -45,7 +45,20 @@ public class HandleExceptionAspect {
 			}
 			result = joinPoint.proceed();
 		} catch (Throwable e) {
-			throw new AppException(errorMessage, errorCode, exceptionType, exceptionClass, e.toString(),e);
+			AppException appException = null;
+			String rootCause = null;
+			if (e instanceof AppException) {
+				appException = (AppException) e;
+				if(appException != null){
+					rootCause = appException.getRootCause();
+					
+				}
+			}
+			if(rootCause == null){
+				rootCause = e.toString();
+			}
+			
+			throw new AppException(errorMessage, errorCode, exceptionType, exceptionClass, rootCause,e);
 		}
 		return result;
 	}
