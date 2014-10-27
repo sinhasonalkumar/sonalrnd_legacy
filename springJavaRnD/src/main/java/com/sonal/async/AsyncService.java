@@ -49,6 +49,7 @@ public class AsyncService {
 				if(futureObject.isDone()){
 					allRecords.add(futureObject.get());
 					futureObjects.remove(futureObject);
+					System.out.println("futureObject Ended" );
 				}
 			}
 			
