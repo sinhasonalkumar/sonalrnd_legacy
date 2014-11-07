@@ -1,6 +1,0 @@
-6    [main] WARN  com.sonal.services.localservices.CustomerServiceLocal  - Sample warn message in CustomerServiceLocal
-6    [main] ERROR com.sonal.services.localservices.CustomerServiceLocal  - Sample error message in CustomerServiceLocal
-7    [main] FATAL com.sonal.services.localservices.CustomerServiceLocal  - Sample fatal message in CustomerServiceLocal
-16   [main] WARN  com.sonal.services.localservices.CustomerServiceLocal  - Sample warn message in CustomerServiceLocal
-16   [main] ERROR com.sonal.services.localservices.CustomerServiceLocal  - Sample error message in CustomerServiceLocal
-16   [main] FATAL com.sonal.services.localservices.CustomerServiceLocal  - Sample fatal message in CustomerServiceLocal
