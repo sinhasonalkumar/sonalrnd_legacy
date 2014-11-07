@@ -12,7 +12,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 @ComponentScan("com.sonal.spring")
 //Enables Spring's annotations 
 @EnableWebMvc   
-public class Config {  
+public class Config {
       
     @Bean  
     public UrlBasedViewResolver setupViewResolver() {  
