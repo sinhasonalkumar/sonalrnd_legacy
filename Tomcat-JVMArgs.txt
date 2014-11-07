@@ -1,1 +1,0 @@
--Xms128m -Xmx1024m -XX:PermSize=64m -XX:MaxPermSize=256m -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=8888 -DproxySet=true -DproxyHost=127.0.0.1 -DproxyPort=8888
