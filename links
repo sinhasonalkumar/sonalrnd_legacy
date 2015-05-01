@@ -3,6 +3,7 @@ https://github.com/olivergierke/repositories-deepdive
 http://www.javabeat.net/java-split-merge-files/
 http://callistaenterprise.se/blogg/teknik/2014/04/22/c10k-developing-non-blocking-rest-services-with-spring-mvc/
 https://github.com/spring-projects/spring-mvc-showcase/blob/master/src/main/java/org/springframework/samples/mvc/async/DeferredResultController.java
+https://github.com/lukas-krecan/listenable-future-demo/blob/master/src/main/java/net/javacrumbs/listenablefuture/ListenableFutureAsyncController.java
 http://www.nurkiewicz.com/2013/02/javautilconcurrentfuture-basics.html
 http://www.nurkiewicz.com/2013/03/deferredresult-asynchronous-processing.html
 http://www.nurkiewicz.com/2013/02/listenablefuture-in-guava.html
