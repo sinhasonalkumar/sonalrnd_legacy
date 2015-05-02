@@ -1,0 +1,42 @@
+ @RequestMapping("/trigger_batch")
+    public ResponseEntity<BatchRequestStatus> triggerTranscoding() {
+
+	BatchRequestStatus BatchRequestStatus = new BatchRequestStatus();
+	BatchNTrackService.startBatch();
+	String requestId = UUID.randomUUID().toString();
+	BatchRequestStatus.setBatchrequestId(requestId);
+	Link link = linkTo((methodOn(BatchController.class).checkTransactionStatus(requestId))).withSelfRel();
+	BatchRequestStatus.add(link);
+	ResponseEntity<BatchRequestStatus> responseEntity = new ResponseEntity<BatchRequestStatus>(BatchRequestStatus, HttpStatus.OK);
+	return responseEntity;
+
+    }
+
+    @RequestMapping("/check_batch_request_status/{batch_request_id}")
+    public ResponseEntity<String> checkTransactionStatus(@PathVariable(value = "batch_request_id") String batchRequestId) {
+	ResponseEntity<String> responseEntity = new ResponseEntity<String>("InProgress", HttpStatus.OK);
+	return responseEntity;
+    }
+    
+    
+      @Async
+    public void startBatch(){
+	ListenableFuture<batchStatus> batch = batchService.batch();
+	batch.addCallback(new ListenableFutureCallback<batchStatus>() {
+
+	    @Override
+	    public void onSuccess(batchStatus result) {
+		// call the CallBackURL to notify the completion of batch.
+		System.out.println(" called the CallBackURL to notify the completion of batch.");
+		
+	    }
+
+	    @Override
+	    public void onFailure(Throwable ex) {
+		System.err.println(" called the CallBackURL to notify the failure of batch.");
+		
+	    }
+	    
+	});
+	
+    }
