@@ -1,3 +1,29 @@
+  @RequestMapping("/start_non_blocking_request")
+    public ResponseEntity<DeferredResult<batchStatus>> startBatch() {
+	ResponseEntity<DeferredResult<batchStatus>> response = null;
+	final DeferredResult<batchStatus> status = new DeferredResult<batchStatus>();
+
+	final ListenableFuture<batchStatus> futureResponse = batchService.batch();
+	futureResponse.addCallback(new ListenableFutureCallback<batchStatus>() {
+
+	    @Override
+	    public void onSuccess(batchStatus result) {
+		status.setResult(result);
+	    }
+
+	    @Override
+	    public void onFailure(Throwable ex) {
+
+	    }
+
+	});
+	
+	response = new ResponseEntity<DeferredResult<batchStatus>>(status,  HttpStatus.OK);
+
+	return response;
+
+    }
+ 
  @RequestMapping("/trigger_batch")
     public ResponseEntity<BatchRequestStatus> triggerTranscoding() {
 
