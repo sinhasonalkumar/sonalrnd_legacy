@@ -4,3 +4,9 @@ https://github.com/spring-projects/spring-batch/blob/master/spring-batch-core/sr
 http://docs.spring.io/spring-batch/reference/html/configureJob.html
 http://malsolo.com/blog4java/?p=260
 http://www.onlinetechvision.com/taskletstep-oriented-processing-in-spring-batch/
+
+
+Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+	    params.put("time", new JobParameter(System.currentTimeMillis()));
+	    JobParameters jobParameters = new JobParameters(params);
+	    jobExecution = jobLauncher.run(transcodeJob, jobParameters);
