@@ -6,6 +6,12 @@ http://malsolo.com/blog4java/?p=260
 http://www.onlinetechvision.com/taskletstep-oriented-processing-in-spring-batch/
 
 
+    @Autowired
+    private Job transcodeJob;
+
+    @Autowired
+    private SimpleJobLauncher jobLauncher;
+
 Map<String, JobParameter> params = new HashMap<String, JobParameter>();
 	    params.put("time", new JobParameter(System.currentTimeMillis()));
 	    JobParameters jobParameters = new JobParameters(params);
