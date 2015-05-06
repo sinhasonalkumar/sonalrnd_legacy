@@ -19,3 +19,4 @@ Map<String, JobParameter> params = new HashMap<String, JobParameter>();
 
 http://www.techavalanche.com/2011/08/21/spring-batch-hello-world-in-memory/
 http://briansjavablog.blogspot.com/2014/04/spring-batch-tutorial.html
+http://stackoverflow.com/questions/8955363/dynamically-choose-a-spring-batch-reader-at-runtime
