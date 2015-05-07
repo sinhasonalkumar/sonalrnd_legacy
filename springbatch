@@ -30,5 +30,6 @@ http://www.dineshonjava.com/2013/01/configuring-step-in-spring-batch-2.html#.VUn
 Dynamic job creating (selecting steps on the fly):-
 https://fisheye.springsource.org/browse/spring-batch/spring-batch-core/src/test/java/org/springframework/batch/core/job/flow/FlowJobTests.java?hb=true
 http://forum.spring.io/forum/spring-projects/batch/125257-creating-spring-batch-flow-job-dynamically
+http://docs.spring.io/spring-batch/reference/html/readersAndWriters.html
 
 
