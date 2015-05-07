@@ -15,7 +15,7 @@ http://www.onlinetechvision.com/taskletstep-oriented-processing-in-spring-batch/
 Map<String, JobParameter> params = new HashMap<String, JobParameter>();
 	    params.put("time", new JobParameter(System.currentTimeMillis()));
 	    JobParameters jobParameters = new JobParameters(params);
-	    jobExecution = jobLauncher.run(transcodeJob, jobParameters);
+	    jobExecution = jobLauncher.run(someJob, jobParameters);
 
 http://www.techavalanche.com/2011/08/21/spring-batch-hello-world-in-memory/
 http://briansjavablog.blogspot.com/2014/04/spring-batch-tutorial.html
