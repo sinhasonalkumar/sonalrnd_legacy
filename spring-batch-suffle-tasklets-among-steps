@@ -111,3 +111,50 @@ public class JobRunner {
 	return tasklet;
     }
 }
+
+
+
+public class SampleJobContext {
+
+    private static final InheritableThreadLocal<TriggerSampleJobRequest> SampleJobRequestContext = new InheritableThreadLocal<TriggerSampleJobRequest>();
+
+    public static void setTriggerSampleJobRequest(TriggerSampleJobRequest triggerSampleJobRequest) {
+	SampleJobRequestContext.set(triggerSampleJobRequest);
+    }
+
+    public static TriggerSampleJobRequest getTriggerSampleJobRequest() {
+	return SampleJobRequestContext.get();
+    }
+
+    public static void removeTriggerSampleJobRequest() {
+	SampleJobRequestContext.remove();
+    }
+
+}
+public class TriggerSampleJobRequest extends ResourceSupport {
+
+    private String SampleRequestId;
+    private String Sample;
+    private  Map<String, String> stepToTaskletMap;
+    
+    public String getSampleRequestId() {
+        return SampleRequestId;
+    }
+    public void setSampleRequestId(String SampleRequestId) {
+        this.SampleRequestId = SampleRequestId;
+    }
+    public String getSample() {
+        return Sample;
+    }
+    public void setSample(String Sample) {
+        this.Sample = Sample;
+    }
+    public Map<String, String> getStepToTaskletMap() {
+        return stepToTaskletMap;
+    }
+    public void setStepToTaskletMap(Map<String, String> stepToTaskletMap) {
+        this.stepToTaskletMap = stepToTaskletMap;
+    }
+     
+    
+}
