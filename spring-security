@@ -34,3 +34,5 @@ http://vivsoft.us/oauth-2-and-basic-authentication-source/
 
 
 https://github.com/spring-projects/spring-security-oauth/tree/master/samples
+https://github.com/royclarkson/spring-rest-service-oauth/blob/master/src/main/java/hello/OAuth2ServerConfiguration.java
+
