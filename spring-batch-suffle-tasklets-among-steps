@@ -1,0 +1,113 @@
+
+
+@Service
+public class JobRunner {
+
+    private static Logger log = Logger.getLogger(SampleJobRunner.class.getName());
+
+    @Autowired
+    private JobBuilderFactory jobBuilderFactory;
+
+    @Autowired
+    private StepBuilderFactory stepBuilderFactory;
+
+    @Autowired
+    private SimpleJobLauncher jobLauncher;
+
+    @Autowired
+    private TaskletDecider taskletDecider;
+
+    @Async
+    public ListenableFuture<JobExecution> startSampleJob(TriggerSampleJobRequest SampleJobRequest) {
+	JobExecution jobExecution = null;
+
+	try {
+	    Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+	    params.put("Sample-job-request-id", new JobParameter(SampleJobRequest.getSampleRequestId()));
+	    params.put("Sample-job-trigger-time", new JobParameter(System.currentTimeMillis()));
+	    params.put("Sample", new JobParameter(SampleJobRequest.getSample()));
+	    JobParameters jobParameters = new JobParameters(params);
+	    SampleJobContext.setTriggerSampleJobRequest(SampleJobRequest);
+	    jobExecution = jobLauncher.run(SampleJob(), jobParameters);
+	    SampleJobContext.removeTriggerSampleJobRequest();
+
+	} catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException | JobParametersInvalidException e) {
+	    log.error("startSampleJob exception ", e);
+	}
+
+	ListenableFuture<JobExecution> listenableJobExecution = new AsyncResult<JobExecution>(jobExecution);
+	return listenableJobExecution;
+    }
+
+    @Bean
+    public Job SampleJob() {
+	Job job = jobBuilderFactory.get("Job :: SampleJob").incrementer(new RunIdIncrementer()).start(SampleStep1()).next(SampleStep2()).next(SampleStep3()).build();
+
+	return job;
+    }
+
+    @Bean
+    @JobScope
+    public Step SampleStep1() {
+	TriggerSampleJobRequest triggerSampleJobRequest = SampleJobContext.getTriggerSampleJobRequest();
+	
+	Map<String, String> stepToTaskletMap = null;
+	if (triggerSampleJobRequest == null) {
+	    stepToTaskletMap = taskletDecider.getStepToTaskletMap();
+	} else {
+	    log.info(triggerSampleJobRequest.getSampleRequestId());
+	    stepToTaskletMap = triggerSampleJobRequest.getStepToTaskletMap();
+	}
+	StepBuilder stepBuilder = stepBuilderFactory.get("SampleStep1");
+	TaskletStep SampleCompeleteStep = stepBuilder.tasklet(SampleTaskletFactory(stepToTaskletMap.get("SampleStep1"))).allowStartIfComplete(true).build();
+	return SampleCompeleteStep;
+    }
+
+    @Bean
+    @JobScope
+    public Step SampleStep2() {
+	TriggerSampleJobRequest triggerSampleJobRequest = SampleJobContext.getTriggerSampleJobRequest();
+	Map<String, String> stepToTaskletMap = null;
+	if (triggerSampleJobRequest == null) {
+	    stepToTaskletMap = taskletDecider.getStepToTaskletMap();
+	} else {
+	    stepToTaskletMap = triggerSampleJobRequest.getStepToTaskletMap();
+	}
+
+	StepBuilder stepBuilder = stepBuilderFactory.get("SampleStep2");
+	TaskletStep SampleCompeleteStep = stepBuilder.tasklet(SampleTaskletFactory(stepToTaskletMap.get("SampleStep2"))).allowStartIfComplete(true).build();
+	return SampleCompeleteStep;
+    }
+
+    @Bean
+    @JobScope
+    public Step SampleStep3() {
+	TriggerSampleJobRequest triggerSampleJobRequest = SampleJobContext.getTriggerSampleJobRequest();
+	Map<String, String> stepToTaskletMap = null;
+	if (triggerSampleJobRequest == null) {
+	    stepToTaskletMap = taskletDecider.getStepToTaskletMap();
+	} else {
+	    stepToTaskletMap = triggerSampleJobRequest.getStepToTaskletMap();
+	}
+
+	StepBuilder stepBuilder = stepBuilderFactory.get("SampleStep3");
+	TaskletStep SampleCompeleteStep = stepBuilder.tasklet(SampleTaskletFactory(stepToTaskletMap.get("SampleStep3"))).allowStartIfComplete(true).build();
+	return SampleCompeleteStep;
+    }
+
+    public Tasklet SampleTaskletFactory(String taskletName) {
+
+	Tasklet tasklet = null;
+	if ("SampleTaskletA".equalsIgnoreCase(taskletName)) {
+	    tasklet = new SampleTaskletA();
+	}
+	if ("SampleTaskletB".equalsIgnoreCase(taskletName)) {
+	    tasklet = new SampleTaskletB();
+	}
+	if ("SampleCompeleteTasklet".equalsIgnoreCase(taskletName)) {
+	    tasklet = new SampleCompeleteTasklet();
+	}
+
+	return tasklet;
+    }
+}
