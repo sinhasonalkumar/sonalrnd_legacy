@@ -12,3 +12,15 @@ Just referernce
 http://www.baeldung.com/2011/10/31/securing-a-restful-web-service-with-spring-security-3-1-part-3/
 https://malalanayake.wordpress.com/2014/06/27/spring-security-on-rest-api/
 https://github.com/spring-projects/spring-data-examples/tree/master/rest/security
+
+OAUTH2
+
+http://www.beingjavaguys.com/2014/10/spring-security-oauth2-integration.html
+http://porterhead.blogspot.com/2014/05/securing-rest-services-with-spring.html
+
+https://github.com/royclarkson/spring-rest-service-oauth/blob/master/src/main/java/hello/WebSecurityConfiguration.java/hello/WebSecurityConfiguration
+http://www.e-zest.net/blog/rest-authentication-using-oauth-2-0-resource-owner-password-flow-protocol/#prettyPhoto
+
+
+
+https://github.com/spring-projects/spring-security-oauth/tree/master/samples
