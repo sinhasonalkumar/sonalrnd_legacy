@@ -41,3 +41,11 @@ MONITOR TASKLET PROGRESS :-
 http://forum.spring.io/forum/spring-projects/batch/107501-how-to-monitor-the-progress-of-a-tasklet-to-send-to-the-gui
 
 
+TO STOP RUNNING JOBS BY DEFAULT BY SPRINGBOOT BY JobLauncherCommandLineRunner :-
+http://stackoverflow.com/questions/27752434/spring-boot-batch-execluding-joblaunchercommandlinerunner
+
+application.properties :-
+server.port = 8081
+#spring.freemarker.checkTemplateLocation=false
+spring.batch.job.enabled=false
+#spring.batch.job.names=none
