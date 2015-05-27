@@ -89,8 +89,8 @@ test {
     }
     afterSuite   {
 	shutdownServer("batchMgr",9000)
-	shutdownServer("BatchNode_Agent_1",9001)
-	shutdownServer("BatchNode_Agent_2",9002)
+	shutdownServer("BatchNodeInstance_1",9001)
+	shutdownServer("BatchNodeInstance_2",9002)
     }
 }
 
