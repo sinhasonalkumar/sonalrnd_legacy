@@ -84,8 +84,8 @@ test {
 	    ]
 	}
 	checkServerHealth("batchMgr",9000)
-	checkServerHealth("BatchNode_Agent_1",9001)
-	checkServerHealth("BatchNode_Agent_2",9002)
+	checkServerHealth("BatchNodeInstance_1",9001)
+	checkServerHealth("BatchNodeInstance_2",9002)
     }
     afterSuite   {
 	shutdownServer("batchMgr",9000)
