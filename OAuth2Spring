@@ -22,3 +22,18 @@ http://tutorials.jenkov.com/oauth2/authorization.html
 ---Mongo Ans Token Store --
 
 https://github.com/iainporter/oauth2-provider/blob/master/src/main/java/com/porterhead/oauth2/mongodb/OAuth2RepositoryTokenStore.java
+
+
+---Externalize ResourceServer from AuthorizationServer
+
+https://github.com/cvut/zuul-spring-support
+
+https://github.com/cloudfoundry/uaa/search?utf8=%E2%9C%93&q=RemoteTokenServices+
+
+https://github.com/sharmaritesh/spring-angularjs-oauth2-sample/blob/master/sonc-resource-server/src/main/java/rites/sample/rserv/OAuth2ResourceConfig.java
+
+http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#el-access
+
+
+http://projects.spring.io/spring-security-oauth/docs/oauth2.html
+http://projects.spring.io/spring-security-oauth/docs/Home.html
