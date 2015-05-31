@@ -1,0 +1,51 @@
+http://www.concretepage.com/spring-batch-3/spring-batch-3-annotation-example-using-mysql-gradle
+https://numberformat.wordpress.com/2013/12/27/hello-world-with-spring-batch-3-0-x-with-pure-annotations/
+https://github.com/spring-projects/spring-batch/blob/master/spring-batch-core/src/test/java/org/springframework/batch/core/job/builder/FlowJobBuilderTests.java
+http://docs.spring.io/spring-batch/reference/html/configureJob.html
+http://malsolo.com/blog4java/?p=260
+http://www.onlinetechvision.com/taskletstep-oriented-processing-in-spring-batch/
+
+
+    @Autowired
+    private Job transcodeJob;
+
+    @Autowired
+    private SimpleJobLauncher jobLauncher;
+
+Map<String, JobParameter> params = new HashMap<String, JobParameter>();
+	    params.put("time", new JobParameter(System.currentTimeMillis()));
+	    JobParameters jobParameters = new JobParameters(params);
+	    jobExecution = jobLauncher.run(someJob, jobParameters);
+
+http://www.techavalanche.com/2011/08/21/spring-batch-hello-world-in-memory/
+http://briansjavablog.blogspot.com/2014/04/spring-batch-tutorial.html
+http://stackoverflow.com/questions/8955363/dynamically-choose-a-spring-batch-reader-at-runtime
+http://www.javacodegeeks.com/2015/03/spring-batch-tutorial.html
+
+https://github.com/N4rm0/spring-batch-example
+https://narmo7.wordpress.com/2014/05/14/spring-batch-how-to-setup-a-flow-job-with-java-based-configuration/
+http://malsolo.com/blog4java/?p=375
+http://www.dineshonjava.com/2013/01/configuring-step-in-spring-batch-2.html#.VUnaKNNViko
+
+Dynamic job creating (selecting steps on the fly):-
+https://fisheye.springsource.org/browse/spring-batch/spring-batch-core/src/test/java/org/springframework/batch/core/job/flow/FlowJobTests.java?hb=true
+http://forum.spring.io/forum/spring-projects/batch/125257-creating-spring-batch-flow-job-dynamically
+http://docs.spring.io/spring-batch/reference/html/readersAndWriters.html
+https://github.com/codecentric/spring-batch-admin-spring-boot
+
+
+https://github.com/regunathb/Trooper/tree/master/batch-core/src/main/java/org/trpr/platform/batch/impl -->good one
+http://www.codingpedia.org/ama/spring-batch-tutorial-with-spring-boot-and-java-configuration/ --> good one
+
+MONITOR TASKLET PROGRESS :-
+http://forum.spring.io/forum/spring-projects/batch/107501-how-to-monitor-the-progress-of-a-tasklet-to-send-to-the-gui
+
+
+TO STOP RUNNING JOBS BY DEFAULT BY SPRINGBOOT BY JobLauncherCommandLineRunner :-
+http://stackoverflow.com/questions/27752434/spring-boot-batch-execluding-joblaunchercommandlinerunner
+
+application.properties :-
+server.port = 8081
+#spring.freemarker.checkTemplateLocation=false
+spring.batch.job.enabled=false
+#spring.batch.job.names=none

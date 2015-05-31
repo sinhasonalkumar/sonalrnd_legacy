@@ -1,0 +1,224 @@
+http://malsolo.com/blog4java/?p=375
+https://github.com/jbbarquero/spring-batch-sample
+
+https://github.com/langmi/spring-batch-examples-basics/blob/master/src/main/java/de/langmi/spring/batch/examples/basics/javaconfig/setup/JobContext.java
+
+--
+
+
+
+
+
+
+
+@Configuration
+@ComponentScan(basePackages = { "Samplebatch" })
+@EnableBatchProcessing
+@EnableAsync
+@SpringBootApplication
+@EnableWebMvc
+@EnableMongoRepositories(basePackages = { "Samplebatch.persistence" })
+@ConfigurationProperties(locations = "classpath:mongo.properties", prefix = "mongo")
+public class SampleBatchAppConfig {
+
+    private static Logger log = Logger.getLogger(SampleBatchAppConfig.class.getName());
+
+    @Autowired
+    private MongoConfiguration mongoConfiguration;
+
+    @Autowired
+    private TaskletDecider taskletDecider;
+
+    @Bean
+    public ResourcelessTransactionManager transactionManager() {
+	ResourcelessTransactionManager resourcelessTransactionManager = new ResourcelessTransactionManager();
+	return resourcelessTransactionManager;
+    }  
+    
+    
+    @Bean
+    public MapJobRepositoryFactoryBean mapJobRepositoryFactoryBean() {
+	MapJobRepositoryFactoryBean mapJobRepositoryFactoryBean = new MapJobRepositoryFactoryBean();
+	mapJobRepositoryFactoryBean.setTransactionManager(transactionManager());
+	
+	return mapJobRepositoryFactoryBean;
+    }
+
+    @Bean
+    public JobRepository jobRepository() {
+	
+	JobRepository jobRepository = null;
+	try {
+	    jobRepository = mapJobRepositoryFactoryBean().getObject();
+	} catch (Exception e) {
+	    log.error("jobRepository exception", e);
+	}
+	return jobRepository;
+    }
+    
+    @Bean
+    public MapJobExplorerFactoryBean jobExplorerFactoryBean(){
+	MapJobExplorerFactoryBean jobExplorerFactoryBean = new MapJobExplorerFactoryBean();
+	jobExplorerFactoryBean.setRepositoryFactory(mapJobRepositoryFactoryBean());
+	
+	return jobExplorerFactoryBean;
+    }
+    
+    public JobExplorer jobExplorer(){
+	JobExplorer jobExplorer = null;
+	try {
+	    jobExplorer = jobExplorerFactoryBean().getObject();
+	} catch (Exception e) {
+	    log.error("jobExplorer exception", e);
+	}
+	return jobExplorer;
+    }
+    
+    @Bean
+    public MapJobRegistry jobRegistry() {
+	MapJobRegistry jobRegistry = new MapJobRegistry();
+	return jobRegistry;
+    }
+
+    @Bean
+    public JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor() {
+	JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor = new JobRegistryBeanPostProcessor();
+	jobRegistryBeanPostProcessor.setJobRegistry(jobRegistry());
+	return jobRegistryBeanPostProcessor;
+    }
+    
+   
+    
+    @Bean
+    public SimpleJobLauncher jobLauncher() {
+	SimpleJobLauncher simpleJobLauncher = new SimpleJobLauncher();
+	simpleJobLauncher.setJobRepository(jobRepository());
+	simpleJobLauncher.setTaskExecutor(taskExecutor());
+	return simpleJobLauncher;
+    }
+
+    @Bean
+    public SimpleAsyncTaskExecutor taskExecutor() {
+	return new SimpleAsyncTaskExecutor();
+    }
+
+    @Bean
+    public SimpleJobOperator simpleJobOperator() {
+
+	SimpleJobOperator simpleJobOperator = new SimpleJobOperator();
+	
+	simpleJobOperator.setJobExplorer(jobExplorer());
+	simpleJobOperator.setJobLauncher(jobLauncher());
+	simpleJobOperator.setJobRegistry(jobRegistry());
+	simpleJobOperator.setJobRepository(jobRepository());
+	
+	return simpleJobOperator;
+    }
+    
+   
+
+    @Bean
+    public JobBuilderFactory jobBuilderFactory() {
+	JobBuilderFactory jobBuilderFactory = new JobBuilderFactory(jobRepository());
+	return jobBuilderFactory;
+    }
+
+    @Bean
+    public StepBuilderFactory stepBuilderFactory() {
+	StepBuilderFactory stepBuilderFactory = new StepBuilderFactory(jobRepository(), transactionManager());
+	return stepBuilderFactory;
+    }
+
+    @Bean
+    public Job SampleJob() {
+	Job job = jobBuilderFactory().get("Job :: TransacodeJob").incrementer(new RunIdIncrementer()).start(SampleStep1()).next(SampleStep2()).next(SampleStep3()).build();
+
+	return job;
+    }
+
+    @Bean
+    @JobScope
+    public Step SampleStep1() {
+	TriggerSampleJobRequest triggerSampleJobRequest = SampleJobContext.getTriggerSampleJobRequest();
+
+	Map<String, String> stepToTaskletMap = null;
+	if (triggerSampleJobRequest == null) {
+	    stepToTaskletMap = taskletDecider.getStepToTaskletMap();
+	} else {
+	    log.info(triggerSampleJobRequest.getSampleRequestId());
+	    stepToTaskletMap = triggerSampleJobRequest.getStepToTaskletMap();
+	}
+	StepBuilder stepBuilder = stepBuilderFactory().get("SampleStep1");
+	TaskletStep SampleCompeleteStep = stepBuilder.tasklet(SampleTaskletFactory(stepToTaskletMap.get("SampleStep1"))).allowStartIfComplete(true).build();
+	return SampleCompeleteStep;
+    }
+
+    @Bean
+    @JobScope
+    public Step SampleStep2() {
+	TriggerSampleJobRequest triggerSampleJobRequest = SampleJobContext.getTriggerSampleJobRequest();
+	Map<String, String> stepToTaskletMap = null;
+	if (triggerSampleJobRequest == null) {
+	    stepToTaskletMap = taskletDecider.getStepToTaskletMap();
+	} else {
+	    stepToTaskletMap = triggerSampleJobRequest.getStepToTaskletMap();
+	}
+
+	StepBuilder stepBuilder = stepBuilderFactory().get("SampleStep2");
+	TaskletStep SampleCompeleteStep = stepBuilder.tasklet(SampleTaskletFactory(stepToTaskletMap.get("SampleStep2"))).allowStartIfComplete(true).build();
+	return SampleCompeleteStep;
+    }
+
+    @Bean
+    @JobScope
+    public Step SampleStep3() {
+	TriggerSampleJobRequest triggerSampleJobRequest = SampleJobContext.getTriggerSampleJobRequest();
+	Map<String, String> stepToTaskletMap = null;
+	if (triggerSampleJobRequest == null) {
+	    stepToTaskletMap = taskletDecider.getStepToTaskletMap();
+	} else {
+	    stepToTaskletMap = triggerSampleJobRequest.getStepToTaskletMap();
+	}
+
+	StepBuilder stepBuilder = stepBuilderFactory().get("SampleStep3");
+	TaskletStep SampleCompeleteStep = stepBuilder.tasklet(SampleTaskletFactory(stepToTaskletMap.get("SampleStep3"))).allowStartIfComplete(true).build();
+	return SampleCompeleteStep;
+    }
+
+    public Tasklet SampleTaskletFactory(String taskletName) {
+
+	Tasklet tasklet = null;
+	if ("SampleTaskletA".equalsIgnoreCase(taskletName)) {
+	    tasklet = new SampleTaskletA();
+	}
+	if ("SampleTaskletB".equalsIgnoreCase(taskletName)) {
+	    tasklet = new SampleTaskletB();
+	}
+	if ("SampleCompeleteTasklet".equalsIgnoreCase(taskletName)) {
+	    tasklet = new SampleCompeleteTasklet();
+	}
+
+	return tasklet;
+    }
+
+    @Bean
+    public MongoFactoryBean mongoFactoryBean() {
+	MongoFactoryBean mongoFactoryBean = new MongoFactoryBean();
+	mongoFactoryBean.setHost(mongoConfiguration.getHost());
+	mongoFactoryBean.setPort(mongoConfiguration.getPort());
+	return mongoFactoryBean;
+    }
+
+    @Bean
+    public MongoTemplate mongoTemplate() {
+	Mongo mongo = null;
+	try {
+	    mongo = mongoFactoryBean().getObject();
+	} catch (Exception e) {
+	    log.error("mongoTemplate exception", e);
+	}
+	String databaseName = mongoConfiguration.getDatabaseName();
+	MongoTemplate mongoTemplate = new MongoTemplate(mongo, databaseName);
+	return mongoTemplate;
+    }
+}
