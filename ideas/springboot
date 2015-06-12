@@ -1,1 +1,49 @@
 https://github.com/spring-projects/spring-boot/blob/master/spring-boot-samples/spring-boot-sample-actuator-log4j2/src/main/resources/application.properties
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+    <Properties>
+        <Property name="PID">????</Property>
+        <Property name="LOG_PATTERN">[%d{yyyy-MM-dd HH:mm:ss.SSS}] log4j2%X{context} - ${sys:PID} - Log4j2-ThreadContext : %X : - %5p [%t] --- %c{1}: %m%n</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="org.apache.tomcat.util.net.NioSelectorPool" level="warn" />
+        <Logger name="org.apache.catalina.startup.DigesterFactory" level="error" />
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>
+
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web"){
+	exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+    compile("org.springframework.boot:spring-boot-starter"){
+	exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+    compile("org.springframework.boot:spring-boot-starter-log4j2")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-starter-data-mongodb")
+    compile("org.springframework.hateoas:spring-hateoas")
+    compile("org.springframework:spring-aspects:4.1.6.RELEASE")
+    compile("org.springframework:spring-test:4.1.6.RELEASE")
+    compile("org.projectlombok:lombok:1.16.4")
+
+    testCompile("junit:junit:4.12")
+    testCompile("org.mockito:mockito-core:1.10.19")
+    testCompile("org.hamcrest:hamcrest-all:1.3")
+    compile("com.jayway.jsonpath:json-path-parent:1.1.0")
+    compile("com.jayway.jsonpath:json-path-assert:1.1.0")
+    compile("com.jayway.jsonpath:json-path:1.1.0")
+}
+configurations {
+    all*.exclude module : 'spring-boot-starter-logging'
+}
