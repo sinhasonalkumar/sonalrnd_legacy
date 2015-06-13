@@ -47,3 +47,6 @@ dependencies {
 configurations {
     all*.exclude module : 'spring-boot-starter-logging'
 }
+
+
+http://examples.javacodegeeks.com/enterprise-java/logback/logback-mapped-diagnostic-contexts-mdc-example/
