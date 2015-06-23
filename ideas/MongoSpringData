@@ -1,0 +1,15 @@
+Write Concern
+http://docs.mongodb.org/manual/core/write-concern/
+
+http://www.pretechsol.com/2013/12/spring-data-mongodb-writeconcern-example.html#.VYm6wPlVhBc
+
+
+@Override
+    @Bean
+    public MongoTemplate mongoTemplate() throws Exception {
+	MongoDbFactory mongoDbFactory = new SimpleMongoDbFactory(mongo(), mongoConfiguration.getDatabaseName());
+	MongoTemplate mongoTemplate = new MongoTemplate(mongoDbFactory, mappingMongoConverter());
+	mongoTemplate.setWriteConcern(WriteConcern.JOURNALED);
+	return mongoTemplate;
+
+    }
