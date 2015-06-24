@@ -36,10 +36,9 @@
 </html>
 
 
+var app = angular.module('userAdminApp.user', []);
 
-
-angular.module('userAdminApp.user.addNewUser', [])
-	   .controller('registerUserController',function($scope, $http) {
+app.controller('registerUserController',function($scope, $http) {
 					$scope.registerUser = function(userVO) {
 						var req = {
 							method : 'POST',
@@ -58,8 +57,7 @@ angular.module('userAdminApp.user.addNewUser', [])
 	   });
 
 
-angular.module('userAdminApp.user.getAllUsers', ['ngGrid'])
-.controller('getAllUsersController', function($scope, $http) {
+app.controller('getAllUsersController', function($scope, $http) {
 			var gridData;
 			$http.get('http://localhost:8080/user/get_all_users')
 			.success(function(data, status) {
