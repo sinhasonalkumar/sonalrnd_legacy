@@ -1,0 +1,58 @@
+https://spring.io/guides/gs/rest-service-cors/
+
+
+@Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
+class CorsFilter implements Filter {
+
+  void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) {
+    HttpServletResponse response = (HttpServletResponse) res
+    response.setHeader("Access-Control-Allow-Origin", "*")
+    //response.setHeader("Access-Control-Allow-Credentials", "true");
+    response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE")
+    response.setHeader("Access-Control-Allow-Headers", "x-requested-with")
+    response.setHeader("Access-Control-Max-Age", "3600")
+    if (request.getMethod()!='OPTIONS') {
+      chain.doFilter(req, res)
+    } else {
+    }
+  }
+
+  void init(FilterConfig filterConfig) {}
+
+  void destroy() {}
+
+}
+The Filter is defined with an @Order so that it is definitely applied before the main Spring Security filter. With that change to the resource server, we should be able to re-launch it and get our greeting in the UI.
+
+Note: blithely using Access-Control-Allow-Origin=* is quick and dirty, and it works, but it is not not secure and is not in any way recommended.
+
+
+app.controller("UserLoginController", function($scope,$http) {
+	$scope.userLogin = function(tulr){
+		var authSec = 'Basic ' +  window.btoa('trustedMyAppClient:123');
+		var oauth2Url = 'http://localhost:8080/oauth/token';
+		var queryParam = $.param({username: 'testuser',password: 'password',grant_type:'password',scope:'read write trust'});
+		console.log(queryParam);
+		console.log(auth);
+		var req = {
+				method : 'POST',
+				url : oauth2Url,
+				headers : {
+					'Content-Type' : 'application/x-www-form-urlencoded;charset=utf-8',
+					'Accept' : 'application/json',
+					'X-Requested-With': 'XMLHttpRequest',
+					'Authorization' : authSec
+				},
+				data : queryParam
+		}
+		$http(req).success(function(data) {
+			console.log("Success");
+			console.log(angular.toJson(data));
+		}).error(function(){
+			console.log("Error ");
+		});
+
+	}
+		
+});
