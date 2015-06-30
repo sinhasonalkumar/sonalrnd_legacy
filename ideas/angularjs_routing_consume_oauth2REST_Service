@@ -1,0 +1,229 @@
+var app = angular.module('myApp', [
+                                           	'ngRoute',
+                                           	'myApp.admin.grid',
+                                           	'myApp.admin'
+                                           	]);
+
+	// configure our routes
+app.config(function($routeProvider) {
+		$routeProvider
+
+			// route for the about page
+			.when('/SubmitTask', {
+				templateUrl : 'submitUserTask.html',
+				controller  : 'loadAllUserMetaController'
+			})
+
+			// route for the contact page
+			.when('/ViewTasks', {
+				templateUrl : 'userTaskStatus.html',
+				controller  : 'checkAllUserTaskStatusController'
+			})
+		
+			.when('/Logout', {
+				templateUrl : '/',
+				controller : 'userLogoutController'	
+			});
+	});
+
+
+app.factory('AuthInterceptor', function ($window, $q) {
+    return {
+        request: function(config) {
+            config.headers = config.headers || {};
+            if ($window.sessionStorage.getItem('access_token') !== null) {
+                config.headers.Authorization = 'Bearer ' + $window.sessionStorage.getItem('access_token');
+            }
+            return config || $q.when(config);
+        },
+        response: function(response) {
+            if (response.status === 401  || response.status === 403) {
+            	 $window.location.href = '/';
+            }
+            return response || $q.when(response);
+        }
+    };
+});
+
+// Register the previously created AuthInterceptor.
+app.config(function ($httpProvider) {
+    $httpProvider.interceptors.push('AuthInterceptor');
+});
+
+app.controller('mainController', function($scope,$window) {
+	 if ($window.sessionStorage.getItem('access_token') ===  null ) {
+		 $window.location.href = '/';
+	 }
+});
+
+app.controller("userLogoutController", function($window, $q) {
+	 $window.sessionStorage.removeItem('refresh_token');
+	 $window.sessionStorage.removeItem('access_token');
+	 $window.location.href = '/';
+});
+
+
+app.controller("UserLoginController", function($scope,$http,$location,$window) {
+	
+	$scope.userLoginSubmit = function(user){
+		var client_Id = 'trustedMyAppUserClient';
+		var secret = '123'; 
+		var auth = 'Basic ' +  window.btoa(client_Id + ':' + secret);
+		var oauth2Url = 'http://127.0.0.1:8080/oauth/token';
+		var queryParam = $.param({username: user.userName,password: user.password,grant_type:'password',scope:'read write trust'});
+		console.log(queryParam);
+		console.log(auth);
+		var req = {
+				method : 'POST',
+				url : oauth2Url,
+				headers : {
+					'Content-Type' : 'application/x-www-form-urlencoded;charset=utf-8',
+					'Accept' : 'application/json',
+					'X-Requested-With': 'XMLHttpRequest',
+					'Authorization' : auth
+				},
+				data : queryParam
+				,withCredentials : 'true'
+		}
+		$http(req).success(function(data) {
+			console.log("Success");
+			 $window.sessionStorage.setItem('refresh_token', data.refresh_token);
+			 $window.sessionStorage.setItem('access_token', data.access_token);
+			 //$window.localStorage['refresh_token'] = data.refresh_token;
+			 console.log(window.sessionStorage.getItem('refresh_token'));
+			 console.log(window.sessionStorage.getItem('access_token'));
+			// console.log(window.localStorage['refresh_token']);
+			 $window.location.href = '/pages/UserDashboard.html';
+		}).error(function(){
+			console.log("Error ");
+			 $window.sessionStorage.removeItem('refresh_token');
+			 $window.sessionStorage.removeItem('access_token');
+			$scope.loginErrorMessage = 'Login Failed !! (Invalid Credential)';
+		});
+
+	}
+		
+});
+
+
+
+
+
+<!DOCTYPE html>
+<html >
+    <head lang="en">
+        <meta charset="utf-8">
+  		<meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>User Api User Login</title>
+         <link rel="stylesheet" href="css/bootstrap/3.3.5/bootstrap.min.css">
+        <script src="js/google/ajax/jquery/2.1.3/jquery.min.js"></script>
+        <script src="js/google/angularjs/1.3.16/angular.min.js"></script>
+        <script src="js/google/angularjs/1.3.16/angular-route.min.js"></script>
+        <script src="js/google/angularjs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
+        <script src="js/bootstrap/3.3.5/bootstrap.min.js"></script>
+        <script src="js/controller/admin/UserController.js"></script>
+    </head>
+    <body ng-app="myApp.admin" ng-controller="UserLoginController">
+
+ <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand">User Login</a>
+      </div>
+     </div>
+</nav>     
+ <br/><br/><br/>
+<div class="container" >
+  <form class="form-horizontal" role="form" ng-submit="userLoginSubmit(user)">
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="userName">User Name :</label>
+      <div class="col-sm-3">
+        <input type="text" class="form-control" id="userName" placeholder="Enter User Name" ng-model="user.userName" >
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="password">Password:</label>
+      <div class="col-sm-3">          
+        <input type="password" class="form-control" id="password" placeholder="Enter password" ng-model="user.password">
+      </div>
+    </div>
+    <div class="form-group">        
+      <div class="col-sm-offset-2 col-sm-10">
+        <div class="checkbox">
+          <label><input type="checkbox"> Remember me</label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">        
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-default">Login</button>
+      </div>
+    </div>
+	
+	<div class="form-group">        
+      <div class="col-sm-offset-2 col-sm-10">
+        {{loginErrorMessage}}
+      </div>
+    </div>
+	    
+    
+  </form>
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+<!DOCTYPE html>
+
+<!-- define angular app -->
+<html ng-app="myApp">
+
+<head>
+  <link rel="stylesheet" href="../css/bootstrap/3.3.5/bootstrap.min.css" />
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
+
+  <!-- SPELLS -->
+  <script src="../js/google/angularjs/1.3.16/angular.min.js"></script>
+  <script src="../js/google/angularjs/1.3.16/angular-route.min.js"></script>
+   <script type="text/javascript" src="../js/google/ajax/jquery/2.1.3/jquery.min.js"></script>
+  <script src="../js/ng-grid/ng-grid.min.js"></script>
+  <script src="../js/controller/admin/UserDashboard.js"></script>
+  <script src="../js/controller/userController.js"></script>
+  <script src="../js/controller/admin/UserController.js"></script>
+  
+</head>
+
+<!-- define angular controller -->
+<body ng-controller="mainController">
+
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand">User Dashboard</a>
+      </div>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#SubmitJob"><i class="fa fa-shield"></i> SubmitTask</a></li>
+        <li><a href="#ViewJobs"><i class="fa fa-shield"></i> View Task</a></li>
+         <li><a href="#Logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div id="main">
+  
+    <!-- angular templating -->
+		<!-- this is where content will be injected -->
+    <div ng-view></div>
+    
+  </div>
+
+  
+</body>
+
+</html>
