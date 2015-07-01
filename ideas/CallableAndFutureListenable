@@ -1,0 +1,59 @@
+@Test
+    public void testSomeTask_load() {
+	SomeTaskRequestStatus requestSomeTask = null;
+	List<String> SomeTaskRequestIds = new CopyOnWriteArrayList<String>();
+	int load = 2;
+	final AtomicInteger count = new AtomicInteger(0);
+	for (int i = 0; i < load; i++) {
+	    requestSomeTask = someTaskClient.requestSomeTask(SomeTaskRequest);
+	    Assert.notNull(requestSomeTask);
+	    String SomeTaskrequestId = requestSomeTask.getSomeTaskrequestId();
+	    SomeTaskRequestIds.add(SomeTaskrequestId);
+	    Assert.notNull(SomeTaskrequestId);
+	}
+	logger.info("json SomeTaskRequestIds :: " + generateSomeTaskRequestIds(SomeTaskRequestIds));
+
+	
+	for (final String SomeTaskRequestId : SomeTaskRequestIds) {
+	    try {
+		Callable<Boolean> callable = new Callable<Boolean>() {
+		    @Override
+		    public Boolean call() throws Exception {
+
+			boolean monitorJob = monitorJob(SomeTaskRequestId, false);
+
+			return monitorJob;
+		    }
+
+		};
+
+		ListenableFutureTask<Boolean> listenableFutureTask = new ListenableFutureTask<Boolean>(callable);
+		listenableFutureTask.addCallback(new ListenableFutureCallback<Boolean>() {
+
+		    @Override
+		    public void onSuccess(Boolean result) {
+			logger.info("Success !!");
+			count.incrementAndGet();
+		    }
+
+		    @Override
+		    public void onFailure(Throwable ex) {
+			logger.error(ex);
+			count.incrementAndGet();
+		    }
+
+		});
+		ExecutorService executor = Executors.newCachedThreadPool();
+		executor.submit(listenableFutureTask);
+
+	    } catch (Exception e) {
+		logger.error(e);
+	    }
+
+	}
+	
+	while(count.intValue() < load){
+	    takePause(1000);
+	}
+
+    }
