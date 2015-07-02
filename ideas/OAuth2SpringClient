@@ -1,0 +1,73 @@
+ package com.sonal.myapp.util;
+
+import java.util.Arrays;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.util.Base64Utils;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.util.UriComponentsBuilder;
+
+public class MyAppOauth2Util {
+
+    public static HttpHeaders buildHeader(String clientId, String secret) {
+
+	HttpHeaders httpHeaders = new HttpHeaders();
+	String authorization = "Basic " + new String(Base64Utils.encode((clientId + ":" + secret).getBytes()));
+	httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+	httpHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+	httpHeaders.add("Authorization", authorization);
+	return httpHeaders;
+    }
+
+    public static HttpHeaders buildHeader(String accessToken) {
+
+	HttpHeaders httpHeaders = new HttpHeaders();
+	String authorization = "Bearer " + accessToken;
+	httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+	httpHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+	httpHeaders.add("Authorization", authorization);
+	return httpHeaders;
+    }
+
+    public static void main(String[] args) {
+	System.out.println(buildURL("http://localhost:8080/oauth/token", "testUser","password"));
+    }
+    public static String buildURL(String authServerURL, String userName, String password) {
+
+	MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+	queryParams.add("username", userName);
+	queryParams.add("password", password);
+	queryParams.add("grant_type", "password");
+	queryParams.add("scope", "read write trust");
+
+	UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(authServerURL).queryParams(queryParams);
+	String url = uriComponentsBuilder.build().toString();
+
+	return url;
+    }
+
+    public static String buildURL(String authServerURL, String refreshToken) {
+
+	MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+
+	queryParams.add("grant_type", "refresh_token");
+	queryParams.add("refresh_token", refreshToken);
+
+	UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(authServerURL).queryParams(queryParams);
+	String clientURL = uriComponentsBuilder.build().toString();
+
+	return clientURL;
+    }
+}
+
+
+
+String url = MyAppOauth2Util.buildURL(authServerURL, refreshToken);
+	    HttpHeaders headers = MyAppOauth2Util.buildHeader(clientId, secret);
+
+	    HttpEntity<String> requestEntity = new HttpEntity<String>(headers);
+	    
+	    ListenableFuture<ResponseEntity<MyAppOuthServerResponse>> futureAuthServerResp = asyncRestTemplate.exchange(url, HttpMethod.POST, requestEntity, MyAppOuthServerResponse.class);
+	    
