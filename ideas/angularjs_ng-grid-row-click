@@ -14,7 +14,7 @@ app.controller('MainCtrl', function($scope) {
             displayName:'Stop', 
             cellTemplate:'<div class="ngCellText" ng-class="col.colIndex()"><a ng-click="loadById(row)">stop</a></div>'
         }],
-        editUser: $scope.editUser
+       
     }
 });
 
@@ -38,7 +38,7 @@ app.controller('MainCtrl', function($scope) {
             displayName:'Stop', 
             cellTemplate:'<div class="ngCellText" ng-class="col.colIndex()"><a ng-click="loadById(row)">{{row.getProperty(col.field)}}</a></div>'
         }],
-        editUser: $scope.editUser
+       
     }
 });
 
