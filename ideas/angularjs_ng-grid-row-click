@@ -1,0 +1,69 @@
+var app = angular.module('myApp', ['ngGrid']);
+
+app.controller('MainCtrl', function($scope) {
+    $scope.loadById = function(row) {  
+   alert( row.entity.name + row.entity.rollNo);
+};
+    
+    $scope.data = [{name: 'test',rollNo:8}];
+
+    $scope.options = {
+        data: 'data',
+        columnDefs: [{
+            field:'name', 
+            displayName:'Stop', 
+            cellTemplate:'<div class="ngCellText" ng-class="col.colIndex()"><a ng-click="loadById(row)">stop</a></div>'
+        }],
+        editUser: $scope.editUser
+    }
+});
+
+
+
+
+
+var app = angular.module('myApp', ['ngGrid']);
+
+app.controller('MainCtrl', function($scope) {
+    $scope.loadById = function(row) {  
+   alert( row.entity.name + row.entity.rollNo);
+};
+    
+    $scope.data = [{name: 'test',rollNo:8}];
+
+    $scope.options = {
+        data: 'data',
+        columnDefs: [{
+            field:'name', 
+            displayName:'Stop', 
+            cellTemplate:'<div class="ngCellText" ng-class="col.colIndex()"><a ng-click="loadById(row)">{{row.getProperty(col.field)}}</a></div>'
+        }],
+        editUser: $scope.editUser
+    }
+});
+
+
+
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8" />
+    <title>AngularJS Plunker</title>
+    <script>document.write('<base href="' + document.location + '" />');</script>
+    <link rel="stylesheet" href="style.css" />
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script data-require="angular.js@1.2.x" src="https://code.angularjs.org/1.2.16/angular.js" data-semver="1.2.16"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/ng-grid/2.0.11/ng-grid.min.js"></script>
+    <script src="app.js"></script>
+    
+    
+  </head>
+
+   <body ng-app="myApp">
+      <div ng-controller="MainCtrl">
+          <div ng-grid="options"></div>
+      </div>
+  </body>
+
+</html>
