@@ -1,7 +1,7 @@
 var app = angular.module('myApp', ['ngGrid']);
 
 app.controller('MainCtrl', function($scope) {
-    $scope.loadById = function(row) {  
+    $scope.startRace = function(row) {  
    alert( row.entity.name + row.entity.rollNo);
 };
     
@@ -9,11 +9,14 @@ app.controller('MainCtrl', function($scope) {
 
     $scope.options = {
         data: 'data',
-        columnDefs: [{
-            field:'name', 
-            displayName:'Stop', 
-            cellTemplate:'<div class="ngCellText" ng-class="col.colIndex()"><a ng-click="loadById(row)">stop</a></div>'
-        }],
+        columnDefs: [
+				                   	{field:'id', displayName:'ID'},
+				                   	{field:'name', displayName:'NAME'},
+				                   	{field:'rollNo', displayName:'ROLL_NO'},
+				                   //	{field:'name', displayName:'name',editableCellTemplate:self.editableCellTempate ,enableCellEdit:true},
+				                   	{displayName:'Start Race', cellTemplate:'<div class="ngCellText" ng-class="col.colIndex()"><a ng-click="startRace(row)">stop</a></div>'}
+			                   
+			                   ],
        
     }
 });
@@ -33,11 +36,14 @@ app.controller('MainCtrl', function($scope) {
 
     $scope.options = {
         data: 'data',
-        columnDefs: [{
-            field:'name', 
-            displayName:'Stop', 
-            cellTemplate:'<div class="ngCellText" ng-class="col.colIndex()"><a ng-click="loadById(row)">{{row.getProperty(col.field)}}</a></div>'
-        }],
+        columnDefs: [
+				                   	{field:'id', displayName:'ID'},
+				                   	{field:'name', displayName:'NAME'},
+				                   	{field:'rollNo', displayName:'ROLL_NO'},
+				                   //	{field:'name', displayName:'name',editableCellTemplate:self.editableCellTempate ,enableCellEdit:true},
+				                   	cellTemplate:'<div class="ngCellText" ng-class="col.colIndex()"><a ng-click="startRace(row)">{{row.getProperty(col.field)}}</a></div>'
+			                   
+			                   ],
        
     }
 });
