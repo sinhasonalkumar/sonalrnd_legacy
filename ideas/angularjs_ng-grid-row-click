@@ -76,4 +76,35 @@ app.controller('MainCtrl', function($scope) {
 </html>
 
 
+.green {
+	color: green;
+	font-weight:bold;
+}
 
+.red {
+	color: red;
+	font-weight:bold;
+}
+
+.orange {
+	color: orange;
+	font-weight:bold;
+}
+
+.Purple {
+	color: Purple;
+	font-weight:bold;
+}
+
+.BlueViolet {
+	color: BlueViolet ;
+	font-weight:bold;
+}
+
+.blue {
+	color: blue;
+	font-weight:bold;
+}
+.hidden{
+	visibility: hidden;
+}
