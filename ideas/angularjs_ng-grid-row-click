@@ -13,6 +13,7 @@ app.controller('MainCtrl', function($scope) {
 				                   	{field:'id', displayName:'ID'},
 				                   	{field:'name', displayName:'NAME'},
 				                   	{field:'rollNo', displayName:'ROLL_NO'},
+				                   	{field:'hasRaceStarted', displayName:'All Retries Done',width:140,cellTemplate:'<div class="ngCellText" ng-class="{\'red\' : row.getProperty(\'hasRaceStarted\') == true,\'green\' : row.getProperty(\'hasRaceStarted\') == false}">{{ row.getProperty(col.field)}}</div>'},
 				                   //	{field:'name', displayName:'name',editableCellTemplate:self.editableCellTempate ,enableCellEdit:true},
 				                   	{displayName:'Start Race', cellTemplate:'<div class="ngCellText" ng-class="col.colIndex()"><a ng-click="startRace(row)">stop</a></div>'}
 			                   
@@ -73,3 +74,6 @@ app.controller('MainCtrl', function($scope) {
   </body>
 
 </html>
+
+
+
