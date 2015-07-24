@@ -70,5 +70,71 @@
 	</build>
 </project>
 
+package com.ormproj.persistence.transaction;
+
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@Aspect
+public class TransactionHandler {
+
+    private final Logger logger = LoggerFactory.getLogger(TransactionHandler.class.getName());
+
+    @Pointcut("execution(* com.ormproj.service.Service1.doSomthing(..))")
+    public void propogatingTransaction() {}
+
+    @Before("propogatingTransaction()")
+    public void startTransactionInit(JoinPoint joinPoint) throws Throwable {
+	logger.info("startTransactionInit");
+    }
+    
+    @After("propogatingTransaction()")
+    public void commitTransaction(JoinPoint joinPoint) throws Throwable {
+	logger.info("commitTransaction");
+    }
+
+
+}
+
+
+package com.ormproj.service;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class Service1 {
+
+    private final Logger logger = LoggerFactory.getLogger(Service1.class.getName());
+
+    public String doSomthing() {
+	logger.info("doing Something");
+	return "doSomething";
+    }
+}
+
+
+package com.ormproj.main;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.ormproj.service.Service1;
+
+
+public class Main {
+    
+    private static  final Logger logger = LoggerFactory.getLogger(Main.class.getName());
+    
+    public static void main(String[] args) {
+	logger.info("Start");
+	Service1 service1 = new Service1();
+	service1.doSomthing();
+    }
+}
 
 
