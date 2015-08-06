@@ -2,3 +2,25 @@ https://github.com/rafalnowak/spring-boot-fun
 https://github.com/jhades/spring-mvc-angularjs-sample-app
 
 https://github.com/g00glen00b/ng-spring-boot
+
+
+task deleteEnvSpecificResources(type: Delete) {
+    delete fileTree("${project.buildDir}/gen_webapp_resources") {
+	include 'baseURL.js'
+    }
+}
+
+task copyEnvSpecificResources(type: Copy){
+    dependsOn deleteEnvSpecificResources
+    from 'config/env/' + (project.hasProperty('env') ? project.env : 'dev')
+    include 'baseURL.js'
+    into "${project.buildDir}/gen_webapp_resources/resources/js"    
+}
+
+war {
+    dependsOn copyEnvSpecificResources
+    from (copyEnvSpecificResources.outputs){
+	into 'resources/js'
+	include 'baseURL.js'
+    }
+}
