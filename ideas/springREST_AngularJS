@@ -3,6 +3,8 @@ https://github.com/jhades/spring-mvc-angularjs-sample-app
 
 https://github.com/g00glen00b/ng-spring-boot
 
+http://bl.ocks.org/phuonghuynh/537f82975a10b5764eed
+
 
 task deleteEnvSpecificResources(type: Delete) {
     delete fileTree("${project.buildDir}/gen_webapp_resources") {
