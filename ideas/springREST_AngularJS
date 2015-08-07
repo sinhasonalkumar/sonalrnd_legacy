@@ -24,3 +24,83 @@ war {
 	include 'baseURL.js'
     }
 }
+
+
+
+@Configuration
+@EnableWebMvc
+public class ServletContextConfig extends WebMvcConfigurerAdapter {
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+	registry.addResourceHandler("/**").addResourceLocations("/");
+    }
+
+    @Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+	configurer.enable();
+    }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+	registry.addViewController("/").setViewName("index");
+    }
+
+    @Bean
+    public ViewResolver viewResolver() {
+	InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+	viewResolver.setSuffix(".html");
+	return viewResolver;
+    }
+}
+
+
+
+
+@SpringBootApplication
+@EnableWebMvc
+@ComponentScan(basePackages = {"admin"})
+public class AdminApp extends SpringBootServletInitializer implements WebApplicationInitializer{
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(AdminApp.class);
+    }
+
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(AdminApp.class, args);
+    }
+}
+
+public class WebAppInitializer implements WebApplicationInitializer {
+    
+    @Override
+    public void onStartup(ServletContext container) {
+        // Create the 'root' Spring application context
+        AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
+        //rootContext.register(TestApp.class);
+
+        // Manage the lifecycle of the root application context
+        container.addListener(new ContextLoaderListener(rootContext));
+
+        // Create the dispatcher servlet's Spring application context
+        AnnotationConfigWebApplicationContext dispatcherServlet = new AnnotationConfigWebApplicationContext();
+        dispatcherServlet.register(ServletContextConfig.class);
+
+        // Register and map the dispatcher servlet
+        ServletRegistration.Dynamic dispatcher = container.addServlet("dispatcher", new DispatcherServlet(dispatcherServlet));
+        dispatcher.setLoadOnStartup(1);
+        dispatcher.addMapping("/*");
+    }
+
+}
+Src
+  |--java
+  |--resources
+  |--webapp
+       |--index.html
+       |--pages
+       |--resources
+       		|-- css
+       		|-- js
+       		|-- images
