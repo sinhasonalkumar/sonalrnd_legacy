@@ -1,0 +1,41 @@
+Spring Injection with @Resource, @Autowired and @Inject
+
+http://blogs.sourceallies.com/2011/08/spring-injection-with-resource-and-autowired/
+
+Conclusions
+With the exception of test 2 & 7 the configuration and outcomes were identical. When I looked under the hood I determined that the ‘@Autowired’ and ‘@Inject’ annotation behave identically. Both of these annotations use the ‘AutowiredAnnotationBeanPostProcessor’ to inject dependencies. ‘@Autowired’ and ‘@Inject’ can be used interchangeable to inject Spring beans. However the ‘@Resource’ annotation uses the ‘CommonAnnotationBeanPostProcessor’ to inject dependencies. Even though they use different post processor classes they all behave nearly identically. Below is a summary of their execution paths.
+
+@Autowired and @Inject
+
+Matches by Type
+Restricts by Qualifiers
+Matches by Name
+@Resource
+
+Matches by Name
+Matches by Type
+Restricts by Qualifiers (ignored if match is found by name)
+While it could be argued that ‘@Resource’ will perform faster by name than ‘@Autowired’ and ‘@Inject’ it would be negligible. This isn’t a sufficient reason to favor one syntax over the others. I do however favor the ‘@Resource’ annotation for it’s concise notation style.
+
+@Resource(name="person")
+@Autowired
+@Qualifier("person")
+@Inject
+@Qualifier("person")
+You may argue that they can be equal concise if you use the field name to identify the bean name.
+
+@Resource
+private Party person;
+@Autowired
+private Party person;
+@Inject
+private Party person;
+True enough, but what happens if you want to refactor your code? By simply renaming the field name you’re no longer referring to the same bean. I recommend the following practices when wiring beans with annotations.
+
+Spring Annotation Style Best Practices
+
+Explicitly name your component [@Component(“beanName”)]
+Use ‘@Resource’ with the ‘name’ attribute [@Resource(name=”beanName”)]
+Avoid ‘@Qualifier’ annotations unless you want to create a list of similar beans. For example you may want to mark a set of rules with a specific ‘@Qualifier’ annotation. This approach makes it simple to inject a group of rule classes into a list that can be used for processing data.
+Scan specific packages for components [context:component-scan base-package=”com.sourceallies.person”]. While this will result in more component-scan configurations it reduces the chance that you’ll add unnecessary components to your Spring context.
+Following these guidelines will increase the readability and stability of your Spring annotation configurations.
