@@ -50,3 +50,85 @@ rs.add('ip_of_sec2:port_of_mongod');
 .
 . 
 rs.add('ip_of_secN:port_of_mongod');     
+
+
+------
+
+
+
+Setup a MongoDB Sharded Cluster
+
+"Sharding = Shared + Nothing"
+Database Sharding is a type of database partitioning that separates very large databases into smaller, faster, more easily managed horizontal partitions called data shards.
+
+Sharding in MongoDB
+
+"MongoDB’s sharding system allows users to partition a collection within a database to distribute the collection’s documents across a number of mongod instances or shards. Sharding increases write capacity, provides the ability to support larger working sets, and raises the limits of total data size beyond the physical resources of a single node." as per the MongoDB Manual.
+
+So when the amount of data that needs to be stored exceeds the storage limit of a single physical resource, a sharded cluster needs to be deployed. Every horizontal partition called "shard" stores a part of the entire dataset. Sharding enables distribution of data, but to have this distributed data replicated as well, each shard should be a Replica Set. For more details on Replica Set, refer to my previous post.
+
+
+Sample Document
+
+ 
+A Sharded Cluster in MongoDB
+
+The figure above denotes a Sharded Cluster, where each Shard is a Replica Set which ensures that each portion of the data lying on different physical devices has a copy for backup in case of failures. As depicted, here the Document 1 is distributed across all shards.
+
+Deploying a Sharded Cluster
+
+A Sharded Cluster consists of
+1 config server(3 for production cluster)
+1 mongos connecting the config server(s) (1 or more for production cluster)
+1 shard i.e. a replica set of a standalone machine(2+ for production cluster)
+For testing purpose you can also deploy all the above three daemons, on the same machine keeping in mind that the ports on which they would run have to be different. Following setups will guide how to assign a different port to each daemon process. Here we are assuming that you are using a single node(for eg. 10.10.10.10) to run all the daemons, in case of multiple machines use their respective ip addresses.
+
+Step 1: Config Server Setup
+Follow the Step 1 and 2 as given in the MongoDB Standalone Setup post.
+Config Server requires a config db location which can be specified in the startup command using the --dbpath option. Before this, we need to create it and change its permissions and ownership to the user running MongoDB. Use the following command to setup the config db path of your choice. Here taking "/data/configdb"
+mkdir -p /data/configdb
+sudo chmod -R 777 /data/configdb
+sudo chown groupName:userName /data/configdb -R       
+Start the Config Server by running the following command on 10.10.10.10
+mongod --configsvr --dbpath /data/configdb --port 27018 
+This would start the config server on the machine at port 27018.
+
+Step 2: MongoS Instance Setup
+Here we only need to follow the Step 1 and 2 as given in the MongoDB Standalone Setup post. No other MongoS specific configuration needs to be done. To start MongoS Server run
+mongos --configdb 10.10.10.10:27018 --port 27019                        
+Here, the --configdb option lists the ip:port of the config servers that the mongos server is supposed to connect to and on what port they are running. In case of multiple config servers the command would be like:
+mongo --configdb 10.10.10.10:27018,11.11.11.11:27017 --port 27019
+
+Step 3: Setting up the Shards
+As mentioned above, each shard is a Replica Set and every member of a Replica Set is a MongoD Instance. For setting up a Shard you need to create a Replica Set first, follow my previous post for achieving the same.
+For testing purpose, we can also setup a standalone MongoD Server to add to the cluster as a shard. Follow the steps for setting up a standalone MongoD Instance as given in this post.
+Having started the MongoD daemon using
+/bin/mongod --config /pathToFile/mongod.conf   
+on 10.10.10.10 all you need is to add this node as a shard to the cluster.
+
+Step 4: Adding Shards to the Cluster
+For adding shards, you need a MongoS terminal which can be opened by hitting the following command:
+mongo mongos_instance_ip:mongos_port            
+where the "mongos_instance_ip" is the ip address of the machine on which MongoS daemon is running at port "mongos_port".
+In our example the command would be
+mongo 10.10.10.10:27019                                   
+which would open a mongos terminal.
+In the terminal fire commands like 
+sh.addShard("shard_ip:mongod_port");                
+to add as many shards you want.
+For eg, here since we have a standalone mongod instance as a shard, we will use
+sh.addShard("10.10.10.10:27017");                     
+You can check the successful execution of the above command using 
+sh.status()                                                          
+in the mongos terminal.
+
+Note: After version 2.0.3, when adding a Replica Set as a shard to the cluster, it is not mandatory to add all nodes in the replica set using sh.addShard(). Adding one of the nodes of the Replica Set would enable mongos to discover all other members and add them to the shard automatically.
+For eg. if you have a replica set named "replSet01" which has 2 members 10.10.10.1 and 10.10.10.2, to add this replica set as a shard to the above cluster you would use
+sh.addShard("replSet01/10.10.10.1:27017");                            
+and this would automatically add both 10.10.10.1 and 10.10.10.2 as a member of the shard being added.
+
+Before version 2.0.3, it is required to specify all the replica set members to be added to the sharded cluster like
+sh.addShard("replSet01/10.10.10.1:27017,10.10.10.2:27017");
+
+Hope this post was a helping hand to you in testing out Sharding in MongoDB.
+All the Best.
