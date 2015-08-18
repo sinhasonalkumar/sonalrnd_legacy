@@ -1,1 +1,52 @@
+
+http://jayatiatblogs.blogspot.in/2013/01/setup-mongodb-replica-set.html
 http://jayatiatblogs.blogspot.com/2013/01/setup-mongodb-sharded-cluster.html
+
+
+Step 1: Follow Step 1,2 and 3 for setting up MongoDB on all the nodes of the Replica Set as given in my previous post.
+
+Step 2: Create a conf file (for example "mongod.conf") at a location owned and accessible by the user with the following content. You can configure "port" and name your replica set by setting the field "replSet" to that name which would be same on all the nodes of the replica set.
+
+dbpath=/var/lib/mongodb
+logpath=/var/log/mongodb/mongodb.log
+logappend=true
+nojournal = true
+port = 27017
+bind_ip = machine_ip (for eg. 100.11.11.11)
+fork = true
+replSet = rsName                                                                              
+
+
+Step 3: Start the MongoD daemon on each node of the Replica Set using:
+ 
+/bin/mongod --config /pathToFile/mongod.conf                                
+
+Step 4: Open a mongo terminal on the node which you want to be the primary node using: 
+ 
+bin/mongo --host ip_of_the_machine                                                
+To make this node the primary run the following command in the opened mongo terminal :
+ 
+rs.initiate()                                                                                         
+
+Step 5: To add the other nodes, run the add commands in the opened mongo terminal on the primary node:
+rs.add("ip_of_secondary_node_1")
+rs.add("ip_of_secondary_node_2")
+and so on.                                                                                          
+Check the status of the replica set using:
+ 
+rs.conf()                                                                                            
+
+Add secondaries to the Replica Set using a JavaScript
+
+After initializing the primary using "rs.initiate()" add the secondaries using :
+
+mongo primary_ip:mongod_port /path_to_js_file                             
+
+where the .js file contains 
+
+rs.add('ip_of_sec1:port_of_mongod');
+rs.add('ip_of_sec2:port_of_mongod');
+.
+.
+. 
+rs.add('ip_of_secN:port_of_mongod');     
