@@ -11,6 +11,7 @@ http://jayatiatblogs.blogspot.com/2013/01/setup-mongodb-sharded-cluster.html
 Very Good Article ArchWise :
 
 http://www.severalnines.com/blog/turning-mongodb-replica-set-sharded-cluster
+http://alexanderwong.me/post/17702101707/mongod-configsvr-and-mongos-initd-and-conf
 
 Step 1: Follow Step 1,2 and 3 for setting up MongoDB on all the nodes of the Replica Set as given in my previous post.
 
