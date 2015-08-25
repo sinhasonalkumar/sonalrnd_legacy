@@ -1,0 +1,5 @@
+No Mongod Instance can become primary node in the undernoted case :-
+
+1) Arbitary Node is down
+2) Primary node goes down
+3) And replica set even number of nodes up and running. this will result into even election case. And tie will occur as a result of election and no will become primary.
