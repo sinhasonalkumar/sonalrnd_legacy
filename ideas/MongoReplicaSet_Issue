@@ -1,3 +1,5 @@
+http://openmymind.net/Does-My-Replica-Set-Need-An-Arbiter/
+
 No Mongod Instance can become primary node in the undernoted case :-
 
 1) Arbitary Node is down
@@ -7,3 +9,9 @@ No Mongod Instance can become primary node in the undernoted case :-
 To Solve this more we have keep other attributes in mind for the elections to choose new proimary in any case :-
 
 http://docs.mongodb.org/v3.0/core/replica-set-elections/
+
+
+Conclusion
+The most important thing is to have an uneven number of votes. Knowing this, it should be obvious that you either want 0 arbiters or 1...but never, ever more.
+
+It's also important to understand that election doesn't rely on the majority of available servers, but of all servers in the set. A 3-server replica set will not tolerate 2 servers failing. Thinking in terms of network splits in the context of separate data centers helps me visualize this.
