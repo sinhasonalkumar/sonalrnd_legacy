@@ -1,0 +1,60 @@
+http://docs.mongodb.org/manual/tutorial/enable-authentication-without-bypass/
+http://docs.mongodb.org/manual/tutorial/manage-users-and-roles/
+http://docs.mongodb.org/manual/reference/system-users-collection/#admin.system.users.roles
+http://docs.mongodb.org/master/tutorial/change-own-password-and-custom-data/
+
+1) Start mongod with undernoted mongod.conf
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+					mongod.conf
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------					
+					
+dbpath=D:\mongoData
+logpath=D:\mongoData\log\mongod.log
+logappend=true
+nojournal = false
+port = 27017
+bind_ip = 192.168.1.1
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------					
+
+2) login to mongo shell  :: mongo 192.168.1.1:27017
+
+use admin
+db.createUser(
+  {
+    user: "admin",
+    pwd: "admin",
+    roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+  }
+)
+
+3) Restart Mmogod with undernoted mongod.conf (add auth=true property in mongod.conf)
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+					mongod.conf
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------		
+
+dbpath=D:\mongoData
+logpath=D:\mongoData\log\mongod.log
+logappend=true
+nojournal = false
+port = 27017
+bind_ip = 192.168.1.1
+auth=true
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------		
+
+4) login to mongo shell  :: mongo 192.168.1.1:27017  -u admin -p admin --authenticationDatabase admin
+
+5) Add additional Users from mongo shell:-
+
+use myAppDB
+db.createUser(
+    {
+      user: "myApp",
+      pwd: "12345678",
+      roles: [
+         { role: "readWrite", db: "myAppDB" }
+      ]
+    }
+)
