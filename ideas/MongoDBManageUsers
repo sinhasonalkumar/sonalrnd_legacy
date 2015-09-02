@@ -1,4 +1,9 @@
 https://docs.mongodb.org/v3.0/tutorial/deploy-replica-set-with-auth/
+https://docs.mongodb.org/v3.0/tutorial/deploy-replica-set-with-auth/
+http://wheelsarch.com/tag/mongodb-keyfile/
+http://igorbicanic.blogspot.com/2014/11/install-and-configure-mongodb-replica.html
+http://software.danielwatrous.com/mongodb-authentication-setup/
+
 
 1) Start mongod with undernoted mongod.conf
 
