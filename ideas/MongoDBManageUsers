@@ -1,7 +1,4 @@
-http://docs.mongodb.org/manual/tutorial/enable-authentication-without-bypass/
-http://docs.mongodb.org/manual/tutorial/manage-users-and-roles/
-http://docs.mongodb.org/manual/reference/system-users-collection/#admin.system.users.roles
-http://docs.mongodb.org/master/tutorial/change-own-password-and-custom-data/
+https://docs.mongodb.org/v3.0/tutorial/deploy-replica-set-with-auth/
 
 1) Start mongod with undernoted mongod.conf
 
@@ -13,21 +10,44 @@ dbpath=D:\mongoData
 logpath=D:\mongoData\log\mongod.log
 logappend=true
 nojournal = false
-port = 27017
-bind_ip = 192.168.1.1
+port = 27016
+bind_ip = 172.18.128.79
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------					
 
-2) login to mongo shell  :: mongo 192.168.1.1:27017
+2) login to mongo shell  :: mongo 172.18.128.79:27016
 
 use admin
 db.createUser(
   {
     user: "admin",
-    pwd: "admin",
+    pwd: "12345678",
     roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
   }
 )
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+				Defect In Mongo 3.0 (Users can't authenticate with authenticationMechanisms=MONGODB-CR)
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
+
+//https://jira.mongodb.org/browse/SERVER-17459
+//http://stackoverflow.com/questions/29006887/mongodb-cr-authentication-failed
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+				Work Around of Defect In Mongo 3.0 (Users can't authenticate with authenticationMechanisms=MONGODB-CR)
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
+
+
+var schema = db.system.version.findOne({"_id" : "authSchema"})
+
+schema.currentVersion = 3
+
+db.system.version.save(schema)
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
+
 
 3) Restart Mmogod with undernoted mongod.conf (add auth=true property in mongod.conf)
 
@@ -39,22 +59,56 @@ dbpath=D:\mongoData
 logpath=D:\mongoData\log\mongod.log
 logappend=true
 nojournal = false
-port = 27017
-bind_ip = 192.168.1.1
+port = 27016
+bind_ip = 172.18.128.79
 auth=true
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------		
 
-4) login to mongo shell  :: mongo 192.168.1.1:27017  -u admin -p admin --authenticationDatabase admin
+4) login to mongo shell  :: mongo 172.18.128.79:27016  -u admin -p 12345678 --authenticationDatabase admin
 
 5) Add additional Users from mongo shell:-
 
 use myAppDB
 db.createUser(
     {
-      user: "myApp",
+      user: "myAppDBAdmin",
+      pwd: "12345678",
+      roles: [
+         { role: "userAdmin", db: "myAppDB" }
+      ]
+    }
+)
+
+
+use myAppDB
+db.createUser(
+    {
+      user: "myAppManagerApp",
       pwd: "12345678",
       roles: [
          { role: "readWrite", db: "myAppDB" }
       ]
     }
 )
+
+MongoClientOptions mongoClientOptions = MongoClientOptions.builder()
+		.writeConcern(WriteConcern.JOURNALED)
+		.build();
+
+	ServerAddress serverAddress = new ServerAddress(mongoConfiguration.getHost(), mongoConfiguration.getPort());
+	
+	//MongoCredential createMongoCRCredential = MongoCredential.createMongoCRCredential("myAppManagerApp", "myAppDB","12345678".toCharArray());
+	MongoCredential createMongoCRCredential = MongoCredential.createMongoCRCredential("myAppManagerApp", mongoConfiguration.getAuthenticationDatabase(),"12345678".toCharArray());
+	
+	Mongo mongo = new MongoClient(serverAddress,Arrays.asList(createMongoCRCredential),mongoClientOptions);
+
+@Override
+    @Bean
+    public MongoTemplate mongoTemplate() throws Exception {
+	
+	//MongoDbFactory mongoDbFactory = new SimpleMongoDbFactory(mongo(), "myAppDB");
+	MongoDbFactory mongoDbFactory = new SimpleMongoDbFactory(mongo(), mongoConfiguration.getDatabaseName());
+	MongoTemplate mongoTemplate = new MongoTemplate(mongoDbFactory, mappingMongoConverter());
+	return mongoTemplate;
+    }
+
