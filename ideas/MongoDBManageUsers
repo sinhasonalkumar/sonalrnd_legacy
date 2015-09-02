@@ -117,3 +117,60 @@ MongoClientOptions mongoClientOptions = MongoClientOptions.builder()
 	return mongoTemplate;
     }
 
+
+
+
+
+ private Mongo replicaSet() throws Exception {
+	Mongo mongo = null;
+	
+	MongoClientOptions mongoClientOptions = MongoClientOptions.builder().connectionsPerHost(mongoConfiguration.getConnectionsPerHost())
+			//.writeConcern(WriteConcern.REPLICA_ACKNOWLEDGED)
+			.writeConcern(WRITE_CONCERN_JOURNALED_REPLICA_ACKNOLEDGED)
+			.build();
+
+	List<ServerAddress> mongosReplicaSets = new ArrayList<ServerAddress>();
+
+	List<String> replicaSetMembers = Arrays.asList(mongoConfiguration.getReplicatSetHosts().split(","));
+	ServerAddress curReplicaSetMember = null;
+	String[] curReplicaSetMemberHostAndPort = null;
+	for (String curReplicaSetMemberAsString : replicaSetMembers) {
+	    curReplicaSetMemberHostAndPort = curReplicaSetMemberAsString.split(":");
+	    curReplicaSetMember = new ServerAddress(curReplicaSetMemberHostAndPort[0], Integer.valueOf(curReplicaSetMemberHostAndPort[1]));
+	    mongosReplicaSets.add(curReplicaSetMember);
+	}
+	
+	MongoCredential createMongoCRCredential = MongoCredential.createMongoCRCredential(mongoConfiguration.getDatabaseUserName(), mongoConfiguration.getAuthenticationDatabase(),mongoConfiguration.getDatabasePassword().toCharArray());
+	mongo = new MongoClient(mongosReplicaSets,Arrays.asList(createMongoCRCredential),mongoClientOptions);
+
+	return mongo;
+    }
+    
+    private Mongo shardedCluster() throws Exception {
+	Mongo mongo = null;
+	
+	MongoClientOptions mongoClientOptions = MongoClientOptions.builder().connectionsPerHost(mongoConfiguration.getConnectionsPerHost())
+                                                                	    .threadsAllowedToBlockForConnectionMultiplier(mongoConfiguration.getThreadsAllowedToBlockForConnectionMultiplier())
+                                                                	    .connectTimeout(mongoConfiguration.getConnectTimeout())
+                                                                	    .maxWaitTime(mongoConfiguration.getMaxWaitTime())
+                                                                	    .socketKeepAlive(mongoConfiguration.isSocketKeepAlive())
+                                                                	    .socketTimeout(mongoConfiguration.getSocketTimeout())
+                                                                	    //.writeConcern(WriteConcern.REPLICA_ACKNOWLEDGED)
+                                                                	    .writeConcern(WRITE_CONCERN_JOURNALED_REPLICA_ACKNOLEDGED)
+                                                                	    .build();
+
+	List<ServerAddress> mongosRouters = new ArrayList<ServerAddress>();
+	
+	List<String> queryRouters = Arrays.asList(mongoConfiguration.getQueryRouterHosts().split(","));
+	ServerAddress mongosRouter = null;
+	String[] queryRouterHostAndPort = null;
+	for (String curQueryRouter : queryRouters) {
+	    queryRouterHostAndPort = curQueryRouter.split(":");
+	    mongosRouter = new ServerAddress(queryRouterHostAndPort[0], Integer.valueOf(queryRouterHostAndPort[1]));
+	    mongosRouters.add(mongosRouter);
+	}
+	MongoCredential createMongoCRCredential = MongoCredential.createMongoCRCredential(mongoConfiguration.getDatabaseUserName(), mongoConfiguration.getAuthenticationDatabase(),mongoConfiguration.getDatabasePassword().toCharArray());
+	mongo = new MongoClient(mongosRouters,Arrays.asList(createMongoCRCredential),mongoClientOptions);
+	
+	return mongo;
+    }
