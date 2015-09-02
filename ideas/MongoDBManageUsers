@@ -174,3 +174,35 @@ MongoClientOptions mongoClientOptions = MongoClientOptions.builder()
 	
 	return mongo;
     }
+
+
+
+dbpath=D:\mongoNonSharedCluster\replSet\primary\mongoData
+logpath=D:\mongoNonSharedCluster\replSet\primary\log\mongod.log
+logappend=true
+nojournal = false
+port = 27017
+bind_ip = 172.18.128.79
+replSet =  replSet1
+auth=true
+keyFile=D:\mongoNonSharedCluster\replSet\primary\sharedkey\replicaset.key
+
+
+dbpath=D:\mongoNonSharedCluster\replSet\secondary\node1\mongoData
+logpath=D:\mongoNonSharedCluster\replSet\secondary\node1\log\mongod.log
+logappend=true
+nojournal = false
+port = 27018
+bind_ip = 172.18.128.79
+replSet =  replSet1
+keyFile=D:\mongoNonSharedCluster\replSet\secondary\node1\sharedkey\replicaset.key
+
+
+dbpath=D:\mongoNonSharedCluster\replSet\secondary\node2\mongoData
+logpath=D:\mongoNonSharedCluster\replSet\secondary\node2\log\mongod.log
+logappend=true
+nojournal = false
+port = 27019
+bind_ip = 172.18.128.79
+replSet =  replSet1
+keyFile=D:\mongoNonSharedCluster\replSet\secondary\node2\sharedkey\replicaset.key
