@@ -371,3 +371,155 @@ private Mongo replicaSet() throws Exception {
 	Mongo mongo = new MongoClient(serverAddress,Arrays.asList(createMongoCRCredential),mongoClientOptions);
 	return mongo;
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    example commands :-
+    
+    
+    use admin
+switched to db admin
+> db.runCommand(   {     usersInfo:"adam",     showPrivileges:true   } )
+{
+    "users" : [
+        {
+            "_id" : "admin.adam",
+            "user" : "adam",
+            "db" : "admin",
+            "roles" : [
+                {
+                    "role" : "userAdminAnyDatabase",
+                    "db" : "admin"
+                }
+            ],
+            "inheritedRoles" : [
+                {
+                    "role" : "userAdminAnyDatabase",
+                    "db" : "admin"
+                }
+            ],
+            "inheritedPrivileges" : [
+                {
+                    "resource" : {
+                        "db" : "",
+                        "collection" : ""
+                    },
+                    "actions" : [
+                        "changeCustomData",
+                        "changePassword",
+                        "createRole",
+                        "createUser",
+                        "dropRole",
+                        "dropUser",
+                        "grantRole",
+                        "revokeRole",
+                        "viewRole",
+                        "viewUser"
+                    ]
+                },
+                {
+                    "resource" : {
+                        "cluster" : true
+                    },
+                    "actions" : [
+                        "authSchemaUpgrade",
+                        "invalidateUserCache",
+                        "listDatabases"
+                    ]
+                },
+                {
+                    "resource" : {
+                        "db" : "",
+                        "collection" : "system.users"
+                    },
+                    "actions" : [
+                        "collStats",
+                        "dbHash",
+                        "dbStats",
+                        "find",
+                        "killCursors",
+                        "planCacheRead"
+                    ]
+                },
+                {
+                    "resource" : {
+                        "db" : "admin",
+                        "collection" : "system.users"
+                    },
+                    "actions" : [
+                        "collStats",
+                        "dbHash",
+                        "dbStats",
+                        "find",
+                        "killCursors",
+                        "planCacheRead"
+                    ]
+                },
+                {
+                    "resource" : {
+                        "db" : "admin",
+                        "collection" : "system.roles"
+                    },
+                    "actions" : [
+                        "collStats",
+                        "dbHash",
+                        "dbStats",
+                        "find",
+                        "killCursors",
+                        "planCacheRead"
+                    ]
+                },
+                {
+                    "resource" : {
+                        "db" : "admin",
+                        "collection" : "system.version"
+                    },
+                    "actions" : [
+                        "collStats",
+                        "dbHash",
+                        "dbStats",
+                        "find",
+                        "killCursors",
+                        "planCacheRead"
+                    ]
+                },
+                {
+                    "resource" : {
+                        "db" : "admin",
+                        "collection" : "system.new_users"
+                    },
+                    "actions" : [
+                        "collStats",
+                        "dbHash",
+                        "dbStats",
+                        "find",
+                        "killCursors",
+                        "planCacheRead"
+                    ]
+                },
+                {
+                    "resource" : {
+                        "db" : "admin",
+                        "collection" : "system.backup_users"
+                    },
+                    "actions" : [
+                        "collStats",
+                        "dbHash",
+                        "dbStats",
+                        "find",
+                        "killCursors",
+                        "planCacheRead"
+                    ]
+                }
+            ]
+        }
+    ],
+    "ok" : 1
+}                    
