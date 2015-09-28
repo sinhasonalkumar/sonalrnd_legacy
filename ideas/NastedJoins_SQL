@@ -1,0 +1,99 @@
+http://sqlity.net/en/1435/a-join-a-day-nested-joins/
+
+ELECT  cp.FirstName,
+        cp.LastName,
+        cp.AccountNumber,
+        so.OrderDate,
+        so.OrderQty,
+        so.LineTotal,
+        prod.Name,
+        prod.ListPrice
+FROM    (
+          SELECT  soh.OrderDate,
+                  sod.OrderQty,
+                  sod.LineTotal,
+                  sod.ProductID,
+                  soh.CustomerID,
+                  soh.SalesOrderID,
+                  sod.SalesOrderDetailID
+          FROM    Sales.SalesOrderHeader AS soh
+          JOIN    Sales.SalesOrderDetail AS sod
+                  ON soh.SalesOrderID = sod.SalesOrderID
+        ) AS so
+JOIN    Production.Product AS prod
+        ON so.ProductID = prod.ProductID
+JOIN    (
+          SELECT  cust.CustomerID,
+                  cust.AccountNumber,
+                  pers.FirstName,
+                  pers.LastName,
+                  pers.BusinessEntityID
+          FROM    Sales.Customer AS cust
+          JOIN    Person.Person AS pers
+                  ON cust.PersonID = pers.BusinessEntityID
+        ) AS cp
+        ON so.CustomerID = cp.CustomerID
+ORDER BY cp.BusinessEntityID, so.SalesOrderID, so.SalesOrderDetailID; 
+
+
+
+WITH  cp AS (
+             SELECT cust.CustomerID,
+                    cust.AccountNumber,
+                    pers.FirstName,
+                    pers.LastName,
+                    pers.BusinessEntityID
+             FROM   Sales.Customer AS cust
+             JOIN   Person.Person AS pers
+                    ON cust.PersonID = pers.BusinessEntityID
+           ),
+      so AS (
+             SELECT soh.OrderDate,
+                    sod.OrderQty,
+                    sod.LineTotal,
+                    sod.ProductID,
+                    soh.CustomerID,
+                    soh.SalesOrderID,
+                    sod.SalesOrderDetailID
+             FROM   Sales.SalesOrderHeader AS soh
+             JOIN   Sales.SalesOrderDetail AS sod
+                    ON soh.SalesOrderID = sod.SalesOrderID
+           )
+  SELECT  cp.FirstName,
+          cp.LastName,
+          cp.AccountNumber,
+          so.OrderDate,
+          so.OrderQty,
+          so.LineTotal,
+          prod.Name,
+          prod.ListPrice
+  FROM    so
+  JOIN    Production.Product AS prod
+          ON so.ProductID = prod.ProductID
+  JOIN    cp
+          ON so.CustomerID = cp.CustomerID
+  ORDER BY cp.BusinessEntityID, so.SalesOrderID, so.SalesOrderDetailID;
+  
+  
+SELECT  pers.FirstName,
+        pers.LastName,
+        cust.AccountNumber,
+        soh.OrderDate,
+        sod.OrderQty,
+        sod.LineTotal,
+        prod.Name,
+        prod.ListPrice
+FROM    Production.Product AS prod
+JOIN    (
+        Sales.SalesOrderHeader AS soh
+        JOIN Sales.SalesOrderDetail AS sod
+          ON soh.SalesOrderID = sod.SalesOrderID
+        )
+        ON sod.ProductID = prod.ProductID
+JOIN    (
+        Sales.Customer AS cust
+        JOIN Person.Person AS pers
+          ON cust.PersonID = pers.BusinessEntityID
+        )
+        ON soh.CustomerID = cust.CustomerID
+ORDER BY pers.BusinessEntityID, soh.SalesOrderID, sod.SalesOrderDetailID;
