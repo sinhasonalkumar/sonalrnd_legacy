@@ -64,3 +64,83 @@ public class Exec {
     outputGobbler.join();  // process ends before the threads finish
   }
 }
+
+
+
+
+
+public class ProcessStreamsReader {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProcessStreamsReader.class);
+
+    public static ProcessStreams read(Process process) {
+	ProcessStreams processStreams = new ProcessStreams();
+
+	final InputStream stdOutStream = process.getInputStream();
+	final InputStream errorStream = process.getErrorStream();
+
+	final StringBuffer stdOutStringBuffer = new StringBuffer();
+	final StringBuffer errorStringBuffer = new StringBuffer();
+
+	Callable<String> stdOutStreamReader = new Callable<String>() {
+
+	    @Override
+	    public String call() throws Exception {
+
+		try {
+		    int c;
+		    while ((c = stdOutStream.read()) != -1)
+			stdOutStringBuffer.append((char) c);
+		} catch (IOException x) {
+		    logger.error("Error While Processing Process Standard Out Stream :: ", x);
+		}
+
+		return stdOutStringBuffer.toString();
+	    }
+
+	};
+
+	Callable<String> errorStreamReader = new Callable<String>() {
+
+	    @Override
+	    public String call() throws Exception {
+		try {
+		    int c;
+		    while ((c = errorStream.read()) != -1)
+			errorStringBuffer.append((char) c);
+		} catch (IOException x) {
+		    logger.error("Error While Processing Process Error Stream :: ", x);
+		}
+
+		return errorStringBuffer.toString();
+	    }
+
+	};
+
+	ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
+	Future<String> futureStdOut = cachedThreadPool.submit(stdOutStreamReader);
+	Future<String> futureError = cachedThreadPool.submit(errorStreamReader);
+
+	try {
+	    String stdOut = futureStdOut.get();
+	    processStreams.setStdOut(stdOut);
+	} catch (InterruptedException e) {
+	    logger.error("InterruptedException :: Error While Processing Process Standard Out :: ", e);
+	} catch (ExecutionException e) {
+	    logger.error("ExecutionException :: Error While Processing Process Standard Out :: ", e);
+	}
+
+	try {
+	    String error = futureError.get();
+	    processStreams.setError(error);
+	} catch (InterruptedException e) {
+	    logger.error("InterruptedException :: Error While Processing Process  Error Stream :: ", e);
+	} catch (ExecutionException e) {
+	    logger.error("ExecutionException :: Error While Processing Process  Error Stream :: ", e);
+	}
+
+	cachedThreadPool.shutdown();
+	
+	return processStreams;
+    }
+}
