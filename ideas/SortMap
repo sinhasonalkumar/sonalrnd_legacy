@@ -1,0 +1,187 @@
+package random;
+
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+
+public class SortMap {
+
+    public static void main(String[] args) {
+
+	final Location clientLocation = getClientLocation();
+	
+	final Map<ServerHost, Location> serverHostLocationMap = getAllServerLocationMap();
+	
+	
+	
+	Map<ServerHost, Location> sortedServerHostLocationMap = new TreeMap<ServerHost, Location>(new Comparator<ServerHost>() {
+
+	    @Override
+	    public int compare(ServerHost o1, ServerHost o2) {
+		Location server1Location = serverHostLocationMap.get(o1);
+		Location server2Location = serverHostLocationMap.get(o2);
+		if(server1Location.distance(clientLocation) > server2Location.distance(clientLocation)){
+		    return 1;
+		}else{
+		    return -1;
+		}
+	    }
+	    
+	});
+	
+	sortedServerHostLocationMap.putAll(serverHostLocationMap);
+	
+	for (ServerHost serverHost : sortedServerHostLocationMap.keySet()) {
+	    System.out.println("Nearest Server is :: " + serverHost.getHostName());
+	    break;
+	}
+
+	
+
+    }
+
+    private static Map<ServerHost, Location> getAllServerLocationMap() {
+	final Map<ServerHost, Location> serverHostLocationMap = new HashMap<ServerHost, Location>();
+	
+	
+	ServerHost s1 = new ServerHost();
+	s1.setHostName("1");
+	Location s1l = new Location();
+	s1l.setCountryName("1");
+	
+	
+	ServerHost s2 = new ServerHost();
+	s2.setHostName("2");
+	Location s2l = new Location();
+	s2l.setCountryName("2");
+	
+	
+	ServerHost s3 = new ServerHost();
+	s3.setHostName("3");
+	Location s3l = new Location();
+	s3l.setCountryName("3");
+	
+	
+	ServerHost s4 = new ServerHost();
+	s4.setHostName("4");
+	Location s4l = new Location();
+	s4l.setCountryName("4");
+	
+	
+	serverHostLocationMap.put(s1, s1l);
+	serverHostLocationMap.put(s2, s2l);
+	serverHostLocationMap.put(s3, s3l);
+	serverHostLocationMap.put(s4, s4l);
+	return serverHostLocationMap;
+    }
+
+    private static Location getClientLocation() {
+	Location clientLocation = new Location();
+	clientLocation.setCountryName("ABC");
+	return clientLocation;
+    }
+}
+
+class Location {
+    public String countryName;
+
+    public String getCountryName() {
+	return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+	this.countryName = countryName;
+    }
+    
+    
+
+    @Override
+    public String toString() {
+	return countryName;
+    }
+
+    public double distance(Location clientLocation) {
+	
+	String clientCountry = clientLocation.getCountryName();
+	String serverCountry = this.getCountryName();
+	
+	String clientServer = clientCountry+serverCountry;
+	
+	double dist = 0;
+	switch (clientServer) {
+	case "ABC1":
+	    dist = 800;
+	    break;
+	    
+	case "ABC2":
+	    dist = 700;
+	    break;
+	    
+	    
+	case "ABC3":
+	    dist = 600;
+	    break;
+	    
+	    
+	case "ABC4":
+	    dist = 500;
+	    break;
+	    
+
+	case "AAA1":
+	    dist = 100;
+	    break;
+	    
+	case "AAA2":
+	    dist = 200;
+	    break;
+	    
+	    
+	case "AAA3":
+	    dist = 300;
+	    break;
+	    
+	    
+	case "AAA4":
+	    dist = 400;
+	    break;
+	 
+
+	default:
+	    dist = -1;
+	    break;
+	}
+
+	return dist;
+    }
+}
+
+class ServerHost {
+    private String hostName;
+    private String ipInfo;
+
+    public String getHostName() {
+	return hostName;
+    }
+
+    public void setHostName(String hostName) {
+	this.hostName = hostName;
+    }
+
+    public String getIpInfo() {
+	return ipInfo;
+    }
+
+    public void setIpInfo(String ipInfo) {
+	this.ipInfo = ipInfo;
+    }
+
+    @Override
+    public String toString() {
+	return hostName;
+    }
+    
+    
+
+}
