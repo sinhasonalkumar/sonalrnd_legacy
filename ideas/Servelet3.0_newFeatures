@@ -1,0 +1,503 @@
+http://www.javabeat.net/new-features-in-servlets-3-0/
+
+
+
+Introduction
+
+This article covers most of the important features available as part of Servlet 3.0 specification. Note that the Servlet 3.0 specification constantly keeps changing frequently with the reviews coming in and the features and the API’s mentioned in this article is based on the specification that is available in JCP for public review as of December 2008. This article focuses on the new set of annotations introduced that can be used by developers rather than put the data in the configuration file, followed by the enhanced Pluggability and the extension support for adding third-party frameworks. The article is finally concluded by detailing about the asynchronous execution of processing and the usage for the same. JSR 315 talks about the Servlet 3.0 features. For attitional information please read the reference section of this article.
+
+also read:
+
+Java EE Tutorials
+Servlets Interview Questions
+New Features in Servlets 3.0
+Asynchronous Servlets in Servlets 3
+Ease of Development through Annotations
+
+The configuration information about a component in a typical web application is expressed in an external meta file. The information about web components such as Servlets, Servlet Filters are mentioned in the deployment descriptor, which is web.xml. Starting from Servlet 3.0, it is also possible to specify the meta information about a component in the definition of a component itself, through Annotations. It doesn’t mean the deployment descriptor is now gone, deployment descriptor in the form of web.xml is still there. In fact information specified in the deployment descriptor takes precedence over the information specified through Annotations.
+
+The Servlet 3.0 specification also provides an option for instructing the Web Container, whether the container should process the annotations defined on the web components. The name of the element is metadata-complete and it is a child element of web-app element. The metadata-complete element indicates whether the meta-data information available in the deployment descriptor is complete. So, if the value for the metadata-complete element is set to a value of true, then it means that the meta information found in the deployment descriptor is complete and eventually the annotations defined on the web components will be ignored by the Servlet Container. If the value for metadata-complete is set to false, then it means that the information in the deployment descriptor is not complete and web components decorated with annotations, if any, should be scanned and processed by the Web Container.
+
+The following annotations are applicable starting from Servlet 3.0 specification,
+
+@WebServlet
+@WebServletContextListener
+@ServletFilter
+@InitParam
+Web Servlet and InitParam Annotation
+
+In this section, we will see the usage of @WebServlet and @InitParam using an example. Look at the following code,
+
+SimpleServlet.java
+
+1
+package net.javabeat.servlet30.newfeatures;
+2
+ 
+3
+import javax.servlet.annotation.InitParam;
+4
+import javax.servlet.annotation.WebServlet;
+5
+ 
+6
+@WebServlet(
+7
+    name = "SimpleServlet",
+8
+    urlPatterns = {"/simple"},
+9
+    initParams = {
+10
+        @InitParam(name = "param1", value = "value1"),
+11
+        @InitParam(name = "param2", value = "value2")}
+12
+)
+13
+public class SimpleServlet {
+14
+ 
+15
+}
+In the example, we have declared a class by name SimpleServlet and this class is not made to extend or implement any of the Servlet/HttpServlet types. Instead, to qualify this class as a Servlet class we have annotated using @WebServlet annotation. Note that the name of the servlet is SimpleServlet as specified through the name attribute. The attribute urlPatterns defines a set of url-patterns that can be used to invoke the Servlet. The Servlet Container after scanning this class will generate the deployment descriptor which may look like the following,
+
+web.xml
+
+1
+...
+2
+ 
+3
+<servlet>
+4
+    <servlet-name>SimpleServlet</servlet-name>
+5
+    <servlet-class>net.javabeat.servlet30.newfeatures.SimpleServlet</servlet-class>
+6
+ 
+7
+        <init-param>
+8
+            <param-name>param1</param-name>
+9
+            <param-value>value1</param-value>
+10
+        </init-param>
+11
+ 
+12
+        <init-param>
+13
+            <param-name>param2</param-name>
+14
+            <param-value>value2</param-value>
+15
+    </init-param>
+16
+ 
+17
+</servlet>
+18
+ 
+19
+<servlet-mapping>
+20
+    <url-pattern>/simple</url-pattern>
+21
+    <servlet-name>SimpleServlet</servlet-name>
+22
+</servlet-mapping>
+23
+ 
+24
+...
+Filter annotation
+
+The @Filter annotation defines a Servlet Filter component for a web application. A filter is typically used to intercept a web request for performing any of the pre-processing operations well before reaching the actual servlet component. Let us see the definition of a filter component using Servlet 3.0 approach,
+
+SimpleFilter.java
+
+1
+package net.javabeat.servlet30.newfeatures;
+2
+ 
+3
+import javax.servlet.annotation.InitParam;
+4
+import javax.servlet.annotation.ServletFilter;
+5
+ 
+6
+@ServletFilter(
+7
+    filterName = "SimpleFilter",
+8
+    urlPatterns = "/simple",
+9
+    initParams =
+10
+        {@InitParam(name = "param1", value = "value1"),
+11
+         @InitParam(name = "param2", value = "value2")}
+12
+)
+13
+public class SimpleFilter {
+14
+ 
+15
+}
+Again, to support backward compatibility, the annotation information in the above class will be transformed as information in the deployment descriptor by the Servlet Container and the deployment descriptor might look like this,
+
+web.xml
+
+1
+...
+2
+ 
+3
+<filter>
+4
+ 
+5
+    <filter-name>SimpleFilter</filter-name>
+6
+    <filter-class>net.javabeat.servlet30.newfeatures.SimpleFilter</filter-class>
+7
+ 
+8
+    <init-param>
+9
+        <param-name>param1</param-name>
+10
+        <param-value>value1</param-value>
+11
+    </init-param>
+12
+ 
+13
+    <init-param>
+14
+        <param-name>param2</param-name>
+15
+        <param-value>value2</param-value>
+16
+    </init-param>
+17
+ 
+18
+</filter>
+19
+ 
+20
+<filter-mapping>
+21
+    <filter-name>SimpleFilter</filter-name>
+22
+    <url-pattern>/simple</url-pattern>
+23
+<filter-mapping>
+24
+ 
+25
+...
+Servlet Context Listener annotation
+
+The Servlet Context Listener is used to receive events whenever the servlet context is created and destroyed by the Web Container. Let us see an usage of this annotation,
+
+SimpleServletContextListener.java
+
+1
+package net.javabeat.servlet30.newfeatures;
+2
+ 
+3
+import javax.servlet.ServletContextEvent;
+4
+import javax.servlet.annotation.WebServletContextListener;
+5
+ 
+6
+@WebServletContextListener()
+7
+public class SimpleServletContextListener {
+8
+ 
+9
+    public void contextInitialized(ServletContextEvent event){
+10
+    }
+11
+ 
+12
+    public void contextDestroyed(ServletContextEvent event){
+13
+    }
+14
+}
+The deployment descriptor in this case would be,
+
+web.xml
+
+1
+<web-app>
+2
+ 
+3
+    <listener>
+4
+        <listener-class>net.javabeat.servlet30.newfeatures.SimpleServletContextListener
+5
+    </listener-class>
+6
+    </listener>
+7
+ 
+8
+</web-app>
+Pluggability in Servlet 3.0
+
+Web Fragments
+
+Today, most of the modern popular frameworks such as Struts and Spring can be integrated easily with the Web Container for building robust applications. However, most of the time, the integration happens in such a way that the web.xml deployment descriptor has to be edited manually to configure framework specific servlet and listener classes. Have a look into the following code snippet,
+
+
+ 
+web.xml
+
+1
+<?xml version="1.0" encoding="UTF-8"?>
+2
+<web-app version="2.5"
+3
+    xmlns="http://java.sun.com/xml/ns/javaee"
+4
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+5
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+6
+    http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+7
+ 
+8
+    <servlet>
+9
+        <servlet-name>Faces Servlet</servlet-name>
+10
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+11
+        <load-on-startup>1</load-on-startup>
+12
+    </servlet>
+13
+ 
+14
+    <servlet-mapping>
+15
+        <servlet-name>Faces Servlet</servlet-name>
+16
+        <url-pattern>/faces/*</url-pattern>
+17
+    </servlet-mapping>
+18
+ 
+19
+</web-app>
+The above web.xml will be familiar for someone who had used the JSF framework. We have used a framework-specific servlet called the FacesServlet in the above case for intercepting all the url requests with the pattern /faces/*. Same will be the case for another intergration frameworks such as Spring or Struts.
+
+The problem with the current approach of the web.xml is that it is not modular. All the configuration details about one particular application is included in one single web.xml file. Assuming that if one single application is making use of one or more frameworks on top of it, there is no way to instruct the Servlet Container about the usage of other frameworks, the only option being is to edit the web.xml deployment descriptor. The Servlet 3.0 specification addresses this issue by introducing web fragments.
+
+A web fragment can be considered as one of the segment of the whole web.xml and it can be imagined that one or more web fragments constitute a single web.xml file. A web-fragment can include all the possible elements that are applicable for the web.xml. Consider a sample web-fragment file,
+
+web-fragment.xml
+
+1
+<web-fragment>
+2
+    <servlet>
+3
+        <servlet-name>myFrameworkSpecificServlet</servlet-name>
+4
+        <servlet-class>myFramework.myFrameworkServlet </servlet-class>
+5
+    </servlet>
+6
+ 
+7
+    <listener>
+8
+        <listener-class>myFramework.myFrameworkListener</listener-class>
+9
+    </listener>
+10
+</web-fragment>
+Typically a framework is bundled in the form of a jar file and it is the responsibility of that framework to define the web fragment file with the name web-fragment.xml in the META-INF directory of the jar file. During the application startup, it is the responsibility of the Container to scan the information that is found in the /META-INF/web-fragment.xml file available in the application’s classpath.
+
+Programmatic support for adding web components
+
+The specification also provides enhanced Pluggability where it provides options for adding servlets, filters, servlet mappings and filter mappings during the run time. Look into the following example code,
+
+SimpleServletContextListener.java
+
+1
+package net.javabeat.servlet30.newfeatures;
+2
+ 
+3
+import java.util.HashMap;
+4
+import java.util.Map;
+5
+ 
+6
+import javax.servlet.ServletContext;
+7
+import javax.servlet.ServletContextEvent;
+8
+import javax.servlet.annotation.WebServletContextListener;
+9
+ 
+10
+@WebServletContextListener()
+11
+public class SimpleServletContextListener {
+12
+ 
+13
+    public void contextInitialized(ServletContextEvent event){
+14
+ 
+15
+        ServletContext context = event.getServletContext();
+16
+ 
+17
+        String simpleServletName = "simpleServlet";
+18
+        String simpleFilterName = "simpleFilter";
+19
+ 
+20
+        Map<String, String> initParams = new HashMap<String, String>();
+21
+        initParams.put("param1", "value1");
+22
+        initParams.put("param2", "value2");
+23
+ 
+24
+        String[] urlPatterns = new String[]{"/simple"};
+25
+ 
+26
+        context.addServlet(simpleServletName, "description for simple servlet",
+27
+             "net.javabeat.servlet30.newfeatures.SimpleServlet", initParams, -1, false);
+28
+        context.addServletMapping(simpleServletName, urlPatterns);
+29
+ 
+30
+        context.addFilter(simpleFilterName, "description for simple filter",
+31
+            "net.javabeat.servlet30.newfeatures.SimpleFilter", initParams, false);
+32
+    }
+33
+ 
+34
+    public void contextDestroyed(ServletContextEvent event){
+35
+    }
+36
+}
+The code is pretty straightforward. It acquires the reference to ServletContext and makes use of the methods addServlet(), addServletMapping() and addFilter() for dynamically adding web components.
+
+Asynchronous processing in Servlet 3.0
+
+In a web application workflow, the client that initiates the request will be received by the Web Container and it is the responsibility of the Web Container to initiate the Servlet object by passing in the request and the response objects by calling in any of the request objects. Assume that the implementation code that tries to access external system, example a Database or a legacy system using JDBC or the JCA API’s is taking considerable amount of time for the execution to happen. In a normal environment the thread will get blocked and it will be made to wait until the data from the external system is available.
+
+To avoid this waiting time or the block time, Servlet 3.0 adds support for asynchronous processing of request. The request can be made to put into asynchronous mode by calling the method ServletRequest.startAsync() that returns a AsyncContext object. It is also possible to specify the timeout duration by calling the ServletRequest.setAsyncTimeout() method. In this case, the response can be committed via two means, one is to call the complete() method that is defined on the AsyncContext object and the other way is when the timeout duration that is originally set on the request object has expired.
+
+It is also possible to add asynchronous listeners to the request object to receive notifications whether the asynchronous operation is completed or the timeout has happened. The following code does the same,
+
+SimpleAsyncListener.java
+
+1
+package net.javabeat.servlet30.newfeatures;
+2
+ 
+3
+import java.io.IOException;
+4
+ 
+5
+import javax.servlet.AsyncEvent;
+6
+import javax.servlet.AsyncListener;
+7
+import javax.servlet.ServletRequest;
+8
+ 
+9
+public class SimpleAsyncListener implements AsyncListener{
+10
+ 
+11
+    public void onComplete(AsyncEvent event) throws IOException {
+12
+    }
+13
+ 
+14
+    public void onTimeout(AsyncEvent event) throws IOException {
+15
+    }
+16
+}
+To add this listener to the request object, use the following piece of code,
+
+1
+request.addAsyncListener(new SimpleAsyncListener());
+The same is reflected in the Web Servlet and the Servlet Filter annotations through the asyncSupported and asyncTimeout attributes,
+
+SimpleServlet.java
+
+1
+package net.javabeat.servlet30.newfeatures;
+2
+ 
+3
+import javax.servlet.annotation.InitParam;
+4
+import javax.servlet.annotation.WebServlet;
+5
+ 
+6
+@WebServlet(
+7
+    name = "SimpleServlet",
+8
+    urlPatterns = {"/simple"},
+9
+    initParams = {
+10
+        @InitParam(name = "param1", value = "value1"),
+11
+        @InitParam(name = "param2", value = "value2")},
+12
+    asyncSupported = true,
+13
+    asyncTimeout = 3000
+14
+)
+15
+public class SimpleServlet {
+16
+ 
+17
+}
+Conclusion
+
+The article covered the new set of annotations like @WebServlet, @ServletFilter that can be used to directly decorate the web components: Servlet and Filter, which could have done previously only through the usage of deployment descriptors. However, it should be noted that the usage of annotations is intended still for developers and not for the others who typically play the role of assembler or deployer. The Servlet 3.0 adds extensible support for plugging-in new frameworks or libraries without asking the developers to edit the deployment descriptor through web fragments. Finally the asynchronous nature of request processing, the possibility of adding asynchronous listeners along with the impacts in @WebServlet and @ServletFilter annotations were also discussed. Thank you for reading this article.
