@@ -1,0 +1,111 @@
+https://www.quora.com/What-are-the-pros-and-cons-of-using-integers-as-primary-keys-vs-using-strings-as-primary-keys-in-a-MySQL-table
+
+
+
+20 FOLLOWERS
+
+Albert Sheu
+Quora User
+Edmond Lau
+Quora User
+Parth Shah
+Matt Jones
+Joseph Hsieh
+Chris Streeter
+Mark Papadakis
+Birk Nilson
+Last asked: 2 Nov 2010
+QUESTION TOPICS
+
+Primary Keys
+MySQL
+QUESTION STATS
+
+Views4,197
+Followers20
+Edits
+What are the pros and cons of using integers as primary keys vs using strings as primary keys in a MySQL table?
+Which method is usually preferred?
+6 Answers
+Birk Nilson
+Birk Nilson, Co-Founder @ Tictail
+3.2k Views
+When indexing tables you should have two things in mind.
+Keep the indexes as small as possible
+Make sure they are optimized for your queries which should in turn be designed to limit the amount of indexes required
+
+In regard to the first point integers will probably result in fewer bytes than varchars in most cases. It will therefore allocate less memory for its indexes and naturally disk space too. But also less bytes being sent back and forth on the wire, both between your application and database as well as in your web application when passing the primary key in GET parameters.
+
+It is especially important in case you use the InnoDB storage engine since all other indexes will refer to the primary key. However, in case the primary key is not set or non-numeric InnoDB will have to internally keep a numeric and auto-incremented id reference for each row. Which it will map against your non-numeric primary key.
+
+Another thing to keep in mind is that numeric and auto-incremented primary keys are sequential which makes the operation of updating the BTREE less random and thus faster. 
+
+But it also depends on how you intend to use and access the data of course. For example if your query requests columns that are covered by the index MySQL can return the data directly from index rather than looking it up in the table first.
+
+In other words there are times where a non-numeric primary key is the way to go, but in most cases it's not. In case you are planning on using a non-numeric primary key though I would recommend that you benchmark the two approaches first.
+
+My last argument is that it is friendlier to us developers. Imagine unicode strings as primary keys in the error log and when typing queries... Often we need to access data quickly to determine why certain things happen. I would hate needing to figure out how to type certain obscure characters when typing queries :)
+  
+Written 4 Nov 2010 • View Upvotes
+More Answers Below. Related Questions
+What are the tradeoffs of using a username as your primary key for a "users" table as opposed to an integer?
+What is the extra cost of using MySQL foreign keys?
+How can I use a VARCHAR or TEXT field as an auto-increment primary key in a MySQL table?
+Why can a database table have only one primary key?
+What is a primary key?
+Toby Thain
+Toby Thain, Using & administering MySQL since the '90s. Worked as developer on several RD...
+1.2k Views • Toby has 150+ answers in MySQL.
+Remember that there is often a sensible natural primary key for your data which has a universal meaning and may not be an integer*. If so, then adding an artificial key just for the sake of an integer type can be a bad idea, as it adds redundancy: an integrity problem. "Performance" is usually less important than  correctness, integrity, and appropriate modelling. This issue is well discussed elsewhere including many Usenet threads and Fabian Pascal's "Practical Issues in Database Management."
+
+A non-obvious rationale for alphabetic keys that I have found very helpful in a particular application, is that if a short symbolic string is used as a key, it can simplify debugging by being immediately human-readable in data dumps (without additional joins). For example, a small table of "states" or other constants - subject to a foreign key constraint wherever they are used.
+
+* for example, US states have an alphabetic code which is unique and is meaningful as a key outside the schema. Also, countries have alphabetic ISO codes. And there are an endless number of other examples.
+  
+Written 1 Feb 2011 • View Upvotes
+Mark Papadakis
+Mark Papadakis, Bytes Conjurer; seeking knowledge 24x7. CTO @ Phaistos Networks
+899 Views
+An integer provides 8 upto 64bits for a value/key. Thus, in the case, of, say, BIGINTs you can encode your primary key value in up to that many bits. A string is of variable length so you are not bound by that limitation.
+
+On the other hand, its much faster to use integers in operations(comparisons, etc). Long story short, if you can encode your primary key value in an integer, always do so, if not, then try again for ways to do so - if all fails, use VARCHAR or similar column types.
+  
+Written 3 Nov 2010 • View Upvotes
+Indra Ginanjar
+Indra Ginanjar, Not a very good programmer
+646 Views
+integer (32 bit) is natural data type on most processor, so it'll get faster processing.
+Using integer since it only 32 bit could save much disk space, which mean faster writing and reading, since disk access is the slowest part of data processing it'll make a huge different on large database.
+
+Const on Integer:
+It's much harder for developing the data processing application
+  
+Written 1 Dec 2011 • View Upvotes
+David Portas
+David Portas • Request Bio
+734 Views
+A key by definition must be irreducibly unique (a minimal superkey). Beyond that there are three desirable characteristics that you should look for when selecting keys: Simplicity; Familiarity; Stability. These are all relative and subjective qualities. In all cases the business requirements and the needs of data integrity should determine your choice of key(s) for any given table. There is no useful answer to your question in the absence of a clear business requirement.
+  
+Written 7 Oct 2011 • View Upvotes
+Lawrence Sinclair
+Lawrence Sinclair, I have worked professionally as an analytics consultant using DB2, Oracle, Sy...
+493 Views
+Primary keys should not contain facts because it will make a design very hard or impossible to evolve over time. So if that is why a string is being considered as a primary key, that suggests a serious underlying design problem in the schema.
+  
+Written 13 Nov 2010
+Related Questions
+What are the pros and cons of temporary tables vs views in mysql?
+What is the difference between primary key and unique key in MySQL?
+Is it adviceable to keep all the columns in a table present in Oracle database as primary key or only putting index to the columns which are b...
+Why auto_increment or clustered primary keys bad?
+What are the pros and cons of using temporary tables vs permanent tables in MySQL?
+Why can only tables with primary keys or unique non-nullable columns be edited with MySQL Workbench using Live Editing Tabsheets in the SQL Ed...
+Why in database primary key cannot allow null value?
+What are the pros and cons of using MySQL instead of SQL Server with ASP.NET?
+MySQL Performance: Is there benefit to storing infrequently used data in different databases rather than just different tables?
+MySQL: How can I implement key value pairs using MySQL and PHP?
+Mysql: Why only unique/primary keys must have all the columns used in partitioning expression?
+What is the use of two primary keys for one table in SQL?
+How can we find the primary key of a table in SQL without using information schema?
+In MySQL, when using InnoDB, what happens to the way data is laid out on disk when the primary key is dropped? What about when another primary...
+MySQL: One large computer-cluster which grows constantly vs many small/medium sized clusters. What are the pros/cons of each of these two alternative...
