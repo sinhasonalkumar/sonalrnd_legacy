@@ -1,0 +1,85 @@
+http://kielczewski.eu/2013/11/spring-mvc-without-web-xml-using-webapplicationinitializer/
+
+
+Spring MVC without web.xml using WebApplicationInitializer
+one year ago 05/11/2013 10 23  Spring, Spring MVC
+Few months ago I started playing with Spring Framework, which I really enjoy. Looking for the tutorials I found some really great resources on the web as well as books. Unfortunately many of them were written for Spring 2.x, which lacks some recent features, mainly ability to configure everything by Java annotations (a.k.a. JavaConfig) rather than XML. That was something that kept me away from Spring at the first place - doing it programmatically gives much more sense of control and is more readable. So, that's what I'm trying to achieve here, I'll try to show you how to do it in more 'modern' way, showing integrations with various software packages along the way.
+Let's start with a simple skeleton Spring MVC application. Since version 3.1 it has Servlet 3 API support, I won't use web.xml for configuring DispatcherServlet, rather I'll configure it programmatically.
+
+Full source code for this article is here on GitHub
+
+Maven configuration
+
+Most important dependencies for this project will be spring-webmvc, which provides DispatcherServlet and pulls other Spring artifacts together with it and Servlet 3.0 API.
+
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-webmvc</artifactId>
+    <version>3.2.4</version>
+</dependency>
+
+<dependency>
+    <groupId>javax.servlet</groupId>
+    <artifactId>javax.servlet-api</artifactId>
+    <version>3.0.1</version>
+</dependency>
+Initializer
+
+AppInitializer is a class that implements WebApplicationInitializer interface. We hook up to onStartup() method, to add DispatcherServlet to ServletContext.
+
+public class AppInitializer implements WebApplicationInitializer {
+
+    @Override
+    public void onStartup(ServletContext servletContext) throws ServletException {
+        WebApplicationContext context = getContext();
+        servletContext.addListener(new ContextLoaderListener(context));
+        ServletRegistration.Dynamic dispatcher = servletContext.addServlet("DispatcherServlet", new DispatcherServlet(context));
+        dispatcher.setLoadOnStartup(1);
+        dispatcher.addMapping("/*");
+    }
+
+    private AnnotationConfigWebApplicationContext getContext() {
+        AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+        context.setConfigLocation("eu.kielczewski.example.config");
+        return context;
+    }
+
+}
+Several things happen here:
+
+AnnotationConfigWebApplicationContext is created. It's WebApplicationContext implementation that looks for Spring configuration in classes annotated with @Configuration annotation. setConfigLocation() method gets hint in which package(s) to look for them.
+ContextLoaderListener is added to ServletContext – the purpose of this is to 'glue' WebApplicationContext to the lifecycle of ServletContext.
+DispatcherServlet is created and initialized with WebApplicationContext we have created, and it's mapped to "/*" URLs and set to eagerly load on application startup.
+Configuration classes
+
+The main AppConfig configuration class doesn't do anything but hits Spring on where to look for its components through @ComponentScan annotation.
+
+@Configuration
+@ComponentScan(basePackages = "eu.kielczewski.example")
+public class AppConfig {
+}
+WebMvcConfig class enables Spring MVC with @EnableWebMvc annotation. It extends WebMvcConfigurerAdapter, which provides empty methods that can be overridden to customize default configuration of Spring MVC. We will stick to default configuration at this time, but it’s advised for you to see what the possibilities are.
+
+@EnableWebMvc
+@Configuration
+public class WebMvcConfig extends WebMvcConfigurerAdapter {
+}
+Controller
+
+Controllers are annotated with @Controller. It is found by Spring because of @ComponentScan annotation in AppConfig. The method will intercept GET request to "/" to which the response will be sent. @ResponseBody indicates that whatever this method returns will be response body, and in this case it's just a "Hello world" String.
+
+@Controller
+public class IndexController {
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @ResponseBody
+    public String showIndex() {
+        return "Hello world";
+    }
+
+}
+Summary
+
+That is all that is needed for skeleton Spring MVC application written using pure JavaConfig and for Servlet 3 API, without web.xml.
+
+See the working example you can play around with - https://github.com/bkielczewski/example-spring-mvc-initializer
